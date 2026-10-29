@@ -1,0 +1,53 @@
+{
+  "metrics": [
+    {
+      "prefix": "",
+      "suffix": "%",
+      "decimals": 0,
+      "value": 78,
+      "from": 58,
+      "label": "Data quality",
+      "detail": "Up from 58% in one quarter. Amazon AGI Labs, Nova Agentic AI"
+    },
+    {
+      "prefix": "",
+      "suffix": "+",
+      "decimals": 0,
+      "value": 95,
+      "label": "People in the program",
+      "detail": "Program delivery at Flixstock"
+    },
+    {
+      "prefix": "$",
+      "suffix": "B",
+      "decimals": 1,
+      "value": 6.4,
+      "label": "Client valuation",
+      "detail": "End-to-end production planning and delivery"
+    },
+    {
+      "prefix": "",
+      "suffix": "+",
+      "decimals": 0,
+      "value": 100,
+      "label": "Associates onboarded",
+      "detail": "Standardised onboarding and training at Keywords Studios"
+    },
+    {
+      "prefix": "",
+      "suffix": "%",
+      "decimals": 0,
+      "value": 38,
+      "label": "Fewer cancellations",
+      "detail": "Adobe subscriptions; CSAT up 63%"
+    },
+    {
+      "prefix": "",
+      "suffix": "",
+      "decimals": 0,
+      "value": 40,
+      "label": "Hires coordinated",
+      "detail": "Within an INR 8–12L monthly budget, on schedule"
+    }
+  ]
+}

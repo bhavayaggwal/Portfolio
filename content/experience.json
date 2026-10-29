@@ -1,0 +1,80 @@
+{
+  "roles": [
+    {
+      "company": "Flixstock",
+      "role": "AI Project Manager",
+      "start": "Aug 2026",
+      "end": "Present",
+      "tags": [
+        "Client delivery",
+        "Program management"
+      ],
+      "points": [
+        "Lead program delivery for a 95+ person team, with end-to-end production planning and delivery for a $6.4B valuation client.",
+        "Coordinate client expectations, delivery timelines and project onboarding across studio coordination and back-office alignment.",
+        "Client-facing lead: manage relationships and expectations while coordinating a cross-functional team."
+      ]
+    },
+    {
+      "company": "Keywords Studios",
+      "role": "Senior Research Associate",
+      "start": "Jan 2026",
+      "end": "Aug 2026",
+      "tags": [
+        "Amazon",
+        "Agile + Waterfall",
+        "Python QA",
+        "Hiring"
+      ],
+      "points": [
+        "Senior AI Researcher leading a 30+ person cross-functional program; onboarded Mecka AI to build the data layer for physical AI agents.",
+        "Owned client-facing status reporting for Amazon across 4–5 concurrent projects: data collection progress, performance, timelines and technical escalations.",
+        "Partnered with Amazon AGI Labs on Nova Agentic AI, lifting data quality from 58% to 78% in a quarter with an automated Python-based QA workflow, wired into CI/CD.",
+        "Ran sprint planning, daily standups and retrospectives for Agile workstreams alongside Waterfall projects in the same portfolio.",
+        "Supported a 40-person Research Associate hiring initiative within an INR 8–12L monthly budget, tightening the funnel to cut wasted interview hours.",
+        "Found a tenure-to-quality correlation through KPI analysis (~80% quality after six months vs 30–50% in month one), which led to targeted training fixes."
+      ]
+    },
+    {
+      "company": "Keywords Studios",
+      "role": "Technical Research Associate",
+      "start": "Apr 2025",
+      "end": "Dec 2025",
+      "tags": [
+        "Operations",
+        "Data quality",
+        "Training"
+      ],
+      "points": [
+        "Operations Coordinator for the Nova Agentic AI data track; improved baseline data quality by 43% through audits, anomaly detection and behavioural pattern analysis.",
+        "Standardised onboarding and training for 100+ associates, building the documentation that kept quality consistent as the program scaled."
+      ]
+    },
+    {
+      "company": "Adobe (via Teleperformance SE)",
+      "role": "Customer Service Associate",
+      "start": "Sep 2024",
+      "end": "Mar 2025",
+      "tags": [
+        "Retention",
+        "Escalations"
+      ],
+      "points": [
+        "Cut subscription cancellations by 38% and lifted customer satisfaction by 63% by analysing user behaviour, coordinating with backend engineering and defining clear escalation criteria."
+      ]
+    },
+    {
+      "company": "CavinKare (Whitescape LLP)",
+      "role": "Vendor Onboarding & Management",
+      "start": "Jul 2022",
+      "end": "Jun 2024",
+      "tags": [
+        "Vendors",
+        "Go-to-market"
+      ],
+      "points": [
+        "Supported vendor onboarding and improved product distribution through market research and go-to-market planning, growing consumer-goods market share by 12%."
+      ]
+    }
+  ]
+}

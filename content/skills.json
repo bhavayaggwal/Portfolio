@@ -1,0 +1,57 @@
+{
+  "groups": [
+    {
+      "name": "Delivery",
+      "items": [
+        "Project Management",
+        "Program Management",
+        "Agile",
+        "Waterfall",
+        "Scrum",
+        "Sprint Planning",
+        "Retrospectives",
+        "Risk & Issue Escalation",
+        "Change Management",
+        "Resource Allocation",
+        "Milestone Tracking",
+        "Budget Oversight"
+      ]
+    },
+    {
+      "name": "Leadership",
+      "items": [
+        "Cross-Functional Coordination",
+        "Client Management",
+        "Onboarding & Training",
+        "Performance Management",
+        "Coaching",
+        "Hiring Coordination"
+      ]
+    },
+    {
+      "name": "Tech & Data",
+      "items": [
+        "Python",
+        "SQL",
+        "Power BI",
+        "CI/CD Pipelines",
+        "AI-Augmented Reporting",
+        "KPI Analysis",
+        "TensorFlow",
+        "OpenCV",
+        "Flask",
+        "PyQt6"
+      ]
+    },
+    {
+      "name": "Tools",
+      "items": [
+        "Jira",
+        "Asana",
+        "Power BI",
+        "GitHub",
+        "Claude"
+      ]
+    }
+  ]
+}

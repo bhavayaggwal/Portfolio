@@ -1,0 +1,64 @@
+{
+  "featured": [
+    {
+      "image": "",
+      "repo": "Real-Time-Sign-Language-Translation",
+      "title": "Real-Time ASL Translation",
+      "blurb": "A CNN that reads American Sign Language characters from a webcam and translates them in real time.",
+      "stats": [
+        "30,000+ images",
+        "95% recognition accuracy"
+      ],
+      "stack": [
+        "TensorFlow",
+        "OpenCV",
+        "CNN"
+      ]
+    },
+    {
+      "image": "",
+      "repo": "Fashion-Recommendation-System",
+      "title": "Fashion Recommendation Engine",
+      "blurb": "Image-based fashion recommendations, later written up as a peer-reviewed book chapter.",
+      "stats": [
+        "Published · ISBN 9781032798110"
+      ],
+      "stack": [
+        "Python",
+        "Deep learning"
+      ]
+    },
+    {
+      "image": "",
+      "repo": "Business-Simulator",
+      "title": "Business Startup Simulator",
+      "blurb": "A desktop simulator that teaches students how price, marketing and stock decisions move revenue, profit and cash. The lesson: a profitable business can still run out of cash.",
+      "stats": [
+        "P&L + cash-flow model",
+        "Demo mode"
+      ],
+      "stack": [
+        "Python",
+        "PyQt6",
+        "SQL Server",
+        "matplotlib"
+      ]
+    },
+    {
+      "image": "",
+      "repo": "SceneForge",
+      "title": "SceneForge",
+      "blurb": "Turn a short phone video into an editable, photoreal 3D scene. Remove or replace objects with natural-language prompts and export for AR.",
+      "stats": [
+        "Phone → 3D"
+      ],
+      "stack": [
+        "TypeScript",
+        "3D reconstruction"
+      ]
+    }
+  ],
+  "hiddenRepos": [
+    "bhavayaggwal"
+  ]
+}

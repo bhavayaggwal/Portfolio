@@ -1,0 +1,54 @@
+{
+  "publications": [
+    {
+      "url": "",
+      "code": "TX-001",
+      "title": "AI-Driven Fashion Item Recommendation Systems",
+      "kind": "Book chapter",
+      "ref": "ISBN 9781032798110"
+    },
+    {
+      "url": "",
+      "code": "TX-002",
+      "title": "Geo-processing with Python",
+      "kind": "Peer-reviewed journal",
+      "ref": "ISSN 2320-2882"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master of Computer Applications (MCA)",
+      "school": "Amity University",
+      "period": "Jul 2024 – Aug 2026",
+      "score": "CGPA 8.23"
+    },
+    {
+      "degree": "Bachelor of Computer Applications (BCA)",
+      "school": "G.G.S. Indraprastha University",
+      "period": "Sep 2021 – Jun 2024",
+      "score": "CGPA 8.96"
+    }
+  ],
+  "achievements": [
+    {
+      "year": "2021",
+      "title": "World Champion",
+      "detail": "Microsoft Imagine Cup Junior"
+    },
+    {
+      "year": "",
+      "title": "President",
+      "detail": "University Research Club"
+    },
+    {
+      "year": "",
+      "title": "Founder & Treasurer",
+      "detail": "Intern Hub"
+    },
+    {
+      "year": "",
+      "title": "In progress",
+      "detail": "PMP certification"
+    }
+  ]
+}

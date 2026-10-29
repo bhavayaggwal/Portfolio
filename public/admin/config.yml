@@ -1,0 +1,232 @@
+# Admin (Sveltia CMS) configuration: which content files can be edited, and their fields.
+# Docs: https://github.com/sveltia/sveltia-cms (compatible with the Decap CMS format)
+
+backend:
+  name: github
+  repo: bhavayaggwal/Portfolio # change if the GitHub repository is named differently
+  branch: main
+  commit_messages:
+    update: "Update {{collection}} “{{slug}}” via admin"
+    uploadMedia: "Upload “{{path}}” via admin"
+    deleteMedia: "Delete “{{path}}” via admin"
+
+# Uploaded images and files are saved here and referenced from the site as /uploads/…
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: site
+    label: Site content
+    editor:
+      preview: false
+    files:
+      - name: story
+        label: "Story (The Adventures of Bunny)"
+        file: content/story.json
+        fields:
+          - { name: album, label: Album title, widget: string }
+          - { name: subtitle, label: Subtitle, widget: string }
+          - name: tracks
+            label: Tracks (in story order)
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { name: id, label: Link name, widget: string, hint: "Lowercase with dashes, used in the page address, e.g. plot-twist" }
+              - { name: title, label: Track title, widget: string }
+              - { name: lead, label: Opening line, widget: string, hint: "Shown large. Keep it under about 60 characters." }
+              - { name: text, label: On-screen text, widget: text, hint: "Two or three sentences, about 40 words." }
+              - { name: notes, label: Liner notes (full text), widget: text, required: false, hint: "Shown when a visitor opens the liner notes." }
+              - { name: stat, label: Sticker line, widget: string, required: false, hint: "e.g. New skill unlocked: empathy" }
+              - name: pins
+                label: Pins (for a brag board)
+                widget: list
+                required: false
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: text, label: Detail, widget: string }
+              - name: actions
+                label: Character actions (played in order; the last one repeats)
+                widget: list
+                field:
+                  name: clip
+                  label: Action
+                  widget: select
+                  options:
+                    - { label: "Idle", value: idle }
+                    - { label: "Wave", value: wave }
+                    - { label: "Walk", value: walk }
+                    - { label: "Start walking", value: walkStart }
+                    - { label: "Point", value: point }
+                    - { label: "Kneel and point", value: kneelPoint }
+                    - { label: "Sit down", value: sitDown }
+                    - { label: "Sit (idle)", value: sitIdle }
+                    - { label: "Sit and talk", value: sitTalk }
+              - name: scene
+                label: Set piece
+                widget: select
+                options: [play, corner, board, detour, portal, runway, crossroads]
+              - { name: mood, label: Music mood, widget: string, required: false, hint: "Describes the soundtrack for this track." }
+              - { name: music, label: Music file, widget: file, required: false, hint: "A short loop (MP3 or OGG) you have the rights to use." }
+          - name: whyMusic
+            label: Why music? (lines shown on the vinyl)
+            widget: list
+            field: { name: line, label: Line, widget: string }
+          - name: ending
+            label: Ending
+            widget: object
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: text, label: Text, widget: string }
+
+      - name: profile
+        label: Profile, contact & character
+        file: content/profile.json
+        fields:
+          - { name: name, label: Name, widget: string }
+          - { name: role, label: Current role, widget: string }
+          - { name: landingLine, label: Landing page line, widget: text, hint: "One sentence under your name on the landing page." }
+          - name: tagline
+            label: Headline words
+            hint: Shown under your name on the landing page, e.g. Innovator · Developer · Audiophile.
+            widget: list
+            field: { name: word, label: Word, widget: string }
+          - { name: intro, label: Intro sentence, widget: text, hint: "One or two sentences under the headline." }
+          - { name: summary, label: Summary paragraph, widget: text }
+          - { name: status, label: Status line, widget: string, required: false, hint: "e.g. Pursuing PMP certification" }
+          - { name: photo, label: Profile photo, widget: image, required: false }
+          - { name: email, label: Email, widget: string }
+          - { name: phone, label: Phone, widget: string, required: false }
+          - { name: showPhone, label: Show phone on the site, widget: boolean, default: false }
+          - { name: resumeFile, label: Résumé file, widget: file, required: false, hint: "PDF recommended. Leave empty to hide the download button." }
+          - name: links
+            label: Links
+            widget: object
+            fields:
+              - { name: github, label: GitHub URL, widget: string }
+              - { name: linkedin, label: LinkedIn URL, widget: string }
+          - { name: location, label: Location, widget: string }
+          - { name: timezone, label: Time zone, widget: string, hint: "IANA name, e.g. Asia/Kolkata" }
+          - { name: timezoneLabel, label: Time zone label, widget: string, hint: "e.g. IST" }
+          - name: character
+            label: 3D character
+            widget: object
+            fields:
+              - { name: model, label: Model file (.glb), widget: file, hint: "Use the optimized model from tools/optimize-model.mjs." }
+              - { name: backgroundOpacity, label: Visibility in the background, widget: number, value_type: float, min: 0, max: 1, step: 0.05 }
+
+      - name: highlights
+        label: Key numbers
+        file: content/highlights.json
+        fields:
+          - name: metrics
+            label: Numbers
+            widget: list
+            summary: "{{fields.prefix}}{{fields.value}}{{fields.suffix}} {{fields.label}}"
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: value, label: Value, widget: number, value_type: float }
+              - { name: prefix, label: Before the number, widget: string, required: false, hint: "e.g. $" }
+              - { name: suffix, label: After the number, widget: string, required: false, hint: "e.g. %, +, B" }
+              - { name: decimals, label: Decimal places, widget: number, value_type: int, default: 0, min: 0, max: 2 }
+              - { name: from, label: Starting value (optional), widget: number, value_type: float, required: false, hint: "Adds a before → after bar, e.g. 58 → 78." }
+              - { name: detail, label: Detail, widget: text }
+
+      - name: experience
+        label: Work experience
+        file: content/experience.json
+        fields:
+          - name: roles
+            label: Roles (newest first)
+            widget: list
+            summary: "{{fields.role}} · {{fields.company}}"
+            fields:
+              - { name: company, label: Company, widget: string }
+              - { name: role, label: Role, widget: string }
+              - { name: start, label: Start, widget: string, hint: "e.g. Aug 2026" }
+              - { name: end, label: End, widget: string, hint: "e.g. Present" }
+              - name: tags
+                label: Tags
+                widget: list
+                required: false
+                field: { name: tag, label: Tag, widget: string }
+              - name: points
+                label: Highlights
+                widget: list
+                field: { name: point, label: Highlight, widget: text }
+
+      - name: projects
+        label: Projects
+        file: content/projects.json
+        fields:
+          - name: featured
+            label: Featured projects
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: repo, label: GitHub repository name, widget: string, hint: "Pulls live stars and dates from GitHub." }
+              - { name: blurb, label: Description, widget: text }
+              - { name: image, label: Image, widget: image, required: false }
+              - name: stats
+                label: Key facts
+                widget: list
+                required: false
+                field: { name: stat, label: Fact, widget: string }
+              - name: stack
+                label: Tools used
+                widget: list
+                required: false
+                field: { name: tool, label: Tool, widget: string }
+          - name: hiddenRepos
+            label: GitHub repositories to hide
+            widget: list
+            required: false
+            field: { name: repo, label: Repository name, widget: string }
+
+      - name: skills
+        label: Skills
+        file: content/skills.json
+        fields:
+          - name: groups
+            label: Skill groups
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { name: name, label: Group name, widget: string }
+              - name: items
+                label: Skills
+                widget: list
+                field: { name: skill, label: Skill, widget: string }
+
+      - name: research
+        label: Research, education & awards
+        file: content/research.json
+        fields:
+          - name: publications
+            label: Publications
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: kind, label: Type, widget: string, hint: "e.g. Book chapter" }
+              - { name: ref, label: Reference, widget: string, hint: "e.g. ISBN or ISSN" }
+              - { name: url, label: Link or PDF, widget: file, required: false }
+              - { name: code, label: Short code, widget: string, required: false }
+          - name: education
+            label: Education
+            widget: list
+            summary: "{{fields.degree}}"
+            fields:
+              - { name: degree, label: Degree, widget: string }
+              - { name: school, label: School, widget: string }
+              - { name: period, label: Period, widget: string }
+              - { name: score, label: Score, widget: string, required: false }
+          - name: achievements
+            label: Recognition
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: detail, label: Detail, widget: string }
+              - { name: year, label: Year, widget: string, required: false }

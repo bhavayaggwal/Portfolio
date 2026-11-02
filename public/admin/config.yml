@@ -47,6 +47,7 @@ collections:
                   - { name: text, label: Detail, widget: string }
               - name: actions
                 label: Character actions (played in order; the last one repeats)
+                hint: "Sitting and standing up are added automatically when needed. End with something that loops well (Idle, Nod, Sit, Type, Sit and talk)."
                 widget: list
                 field:
                   name: clip
@@ -55,13 +56,26 @@ collections:
                   options:
                     - { label: "Idle", value: idle }
                     - { label: "Wave", value: wave }
-                    - { label: "Walk", value: walk }
-                    - { label: "Start walking", value: walkStart }
+                    - { label: "Walk on stage (off right, in from left)", value: walkIn }
+                    - { label: "Catwalk in from the back", value: catwalk }
+                    - { label: "Nod to the beat", value: nod }
+                    - { label: "Sarcastic nod", value: smirkNod }
                     - { label: "Point", value: point }
                     - { label: "Kneel and point", value: kneelPoint }
+                    - { label: "Surprised", value: surprised }
+                    - { label: "Look around", value: lookAround }
+                    - { label: "Think", value: think }
+                    - { label: "Talk", value: talk }
+                    - { label: "Shrug", value: shrug }
+                    - { label: "Victory", value: victory }
+                    - { label: "Dance", value: dance }
+                    - { label: "Bow", value: bow }
                     - { label: "Sit down", value: sitDown }
                     - { label: "Sit (idle)", value: sitIdle }
                     - { label: "Sit and talk", value: sitTalk }
+                    - { label: "Sit and clap", value: sitClap }
+                    - { label: "Type at a desk", value: type }
+                    - { label: "Stand up", value: standUp }
               - name: scene
                 label: Set piece
                 widget: select

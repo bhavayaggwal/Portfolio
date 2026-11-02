@@ -11,8 +11,8 @@
       "stat": "",
       "pins": [],
       "actions": [
-        "idle",
-        "wave"
+        "wave",
+        "idle"
       ],
       "scene": "play",
       "mood": "Gentle lo-fi intro, warm and inviting, like headphones going on",
@@ -27,8 +27,9 @@
       "stat": "Curiosity: fully charged",
       "pins": [],
       "actions": [
+        "walkIn",
         "sitDown",
-        "sitIdle"
+        "type"
       ],
       "scene": "corner",
       "mood": "Soft piano that builds into an upbeat synth drop",
@@ -68,7 +69,9 @@
         }
       ],
       "actions": [
+        "walkIn",
         "point",
+        "victory",
         "idle"
       ],
       "scene": "board",
@@ -84,7 +87,9 @@
       "stat": "New skill unlocked: empathy, ground-level edition",
       "pins": [],
       "actions": [
-        "walk",
+        "surprised",
+        "walkIn",
+        "sitDown",
         "sitTalk"
       ],
       "scene": "detour",
@@ -100,8 +105,9 @@
       "stat": "58% → 78% data quality",
       "pins": [],
       "actions": [
-        "walkStart",
+        "walkIn",
         "kneelPoint",
+        "think",
         "idle"
       ],
       "scene": "portal",
@@ -117,9 +123,11 @@
       "stat": "New skill unlocked: leading people, not just pipelines",
       "pins": [],
       "actions": [
-        "walk",
+        "catwalk",
+        "nod",
+        "talk",
         "point",
-        "idle"
+        "nod"
       ],
       "scene": "runway",
       "mood": "Stylish, confident runway groove",
@@ -134,8 +142,11 @@
       "stat": "",
       "pins": [],
       "actions": [
-        "idle",
-        "wave"
+        "walkIn",
+        "lookAround",
+        "shrug",
+        "wave",
+        "idle"
       ],
       "scene": "crossroads",
       "mood": "Hopeful and open-ended, a melody that feels like a sunrise",

@@ -1,4 +1,4 @@
-# Handoff: where the portfolio stands (28 Oct 2026)
+# Handoff: where the portfolio stands (30 Oct 2026)
 
 Read this first when picking the work back up. Companion docs: `PLAN.md` (plan and decisions),
 `STORY-MAP.md` (choreography and the Mixamo motion list), `story-vision.md` (the original "Adventures of Bunny" text).
@@ -16,20 +16,24 @@ npm run dev          # http://localhost:8080   (admin: /admin/index.html, rig to
   - `/work/` featured projects + live GitHub repos · `/papers/` · `/skills/` (drag sphere) · `/contact/` (placeholder).
 - **Admin** (Sveltia CMS) at `/admin/index.html`: edits every `content/*.json` file, uploads to `public/uploads/`.
   Works locally via "Work with Local Repository" in Chrome. Field definitions: `public/admin/config.yml`.
-- **3D character** `public/models/bhavay.glb` (1.5 MB): rigged on Mixamo, 9 clips: idle, wave, walk (in place),
-  walkStart, point, kneelPoint, sitDown, sitIdle, sitTalk. Loaded by `src/figure.js` (idle loop, wave on click,
+- **3D character** `public/models/bhavay.glb` (2.3 MB): rigged on Mixamo, 21 clips (the original 9 plus sitClap, standUp,
+  type, nod, smirkNod, surprised, think, talk, shrug, bow, catwalk, dance) and a built-in `waveSeated`. Loaded by `src/figure.js` (idle loop, wave on click,
   cursor look, drag to turn, glides to the background at 40% on scroll).
 - **Model pipeline:** `npm run optimize-model` → Mixamo → `tools/rig/index.html` (merges FBX clips, saves to
   `models/build/`) → `npm run compress-rigged` (writes `public/models/bhavay.glb`).
 - **Deploy workflow** `.github/workflows/deploy.yml` (GitHub Pages on push to `main`), not yet used.
 
-## Git
-- Local commits: `ee11550` baseline, `a5f254d` character-adaptability plan. **No remote yet.**
-- To publish: create an empty public repo `bhavayaggwal/Portfolio` (GitHub Desktop "Publish repository", or
-  github.com/new without a README), then `git push -u origin main`. If the repo name differs, update `repo:` in
-  `public/admin/config.yml`. Set Pages → Source to "GitHub Actions".
-- Git-ignored on purpose: `dump/` (set-aside files, incl. the 174 MB OBJ and the avatar video), `models/source/`
-  (original GLB + Mixamo FBX), `models/build/`, `public/draco/`, `.agents/` (the design skill), `node_modules/`, `dist/`.
+## Git and hosting
+- Remote `origin` = `bhavayaggwal/Portfolio` (public). History was reset to one clean commit (`7758eb1`) on
+  29 Oct 2026 so the phone number is not in it; the old commits are on the local-only branch `backup/pre-public`.
+- **Live at https://bhavayaggwal.github.io/Portfolio/** via GitHub Pages (Source: GitHub Actions,
+  `.github/workflows/deploy.yml`). Every push to `main` redeploys.
+- No custom domain for now (decided 30 Oct). Options discussed: a ~$10/yr domain with the name in it beats the free
+  `bunny.work.gd`; Cloudflare Pages if the repo should go private again.
+- Admin on the live site would need GitHub sign-in setup; edit via localhost "Work with Local Repository" and push.
+- Everything `src/content.js` imports ships in the public JS, so it only imports files a page shows.
+- Git-ignored on purpose: `dump/` (set-aside files, incl. the 174 MB OBJ, the avatar video and the old résumé),
+  `models/source/` (original GLB + Mixamo FBX), `models/build/`, `public/draco/`, `.agents/`, `node_modules/`, `dist/`.
 
 ## Decisions made
 - Concept: **the story is an album**; landing = album cover; Story = 7 tracks; music player bar + spinning vinyl
@@ -52,16 +56,30 @@ npm run dev          # http://localhost:8080   (admin: /admin/index.html, rig to
    must-have: head nod, Stand Up, Typing, Looking Around, Victory/Cheering, Surprised;
    nice-to-have: catwalk walk, Talking, Thinking, Shrugging, Sitting Clap, Bow, a short dance.
    Settings: FBX Binary, Without Skin, 30 fps, In Place for walks, Character Arm-Space ~55–65 (same on every clip).
-2. **GitHub repo** creation (see Git above).
-3. Optional: remove the phone number from `content/profile.json` before the repo goes public (it is hidden on the
-   site but would be visible in the repo; it is also inside the uploaded résumé).
+2. A new résumé without the phone number (PDF), uploaded via admin → Profile → Résumé file (button hidden until then).
+
+## Redesign (2 Nov 2026): work from here next
+The plan is `docs/REDESIGN.md`: pages Home → Story → Work → Contact, taste-skill direction "The dark room"
+(warm black and gold, Clash Grotesk), Web3Forms contact form, audit fixes from the taste skill, Hallmark and
+Ponytail. It folds in the phase 3 review below. Waiting on Bhavay: the Web3Forms key, project screenshots, and the
+OK to commit phase 3 as the baseline.
+
+## Review of phase 3 (Bhavay, 30 Oct 2026)
+Phase 3 is built but **uncommitted**. Bhavay reviewed it at localhost.
+- **Good:** the story flow; animations are "half decent" and need refinement.
+- **Fix next:**
+  1. **Animation timing is off** (beats vs. scroll and autoplay; Stand Up takes ~5 s, walk off/on ~3 s per scene change).
+  2. **Player bar repeats the track titles** already on the page; it should show something else (e.g. the song or mood).
+  3. **"Hello, World!" bubble appears before the desk and laptop** in Quiet Kid; cue it off the `type` role, not a timer.
+  4. **Site structure:** a separate **Home** page; **Story becomes page 2**; Work, Papers, Skills, Contact follow in that order.
+- Wait for Bhavay's go-ahead before starting these.
 
 ## Next steps (in order)
-1. Merge the new Mixamo clips: add them to `CLIPS` in `tools/rig/merge.js`, run the rig tool, `npm run compress-rigged`.
-2. **Phase 3, story engine:** pinned scroll tracks, player bar, vinyl progress ring, role-based choreography per
-   `STORY-MAP.md` (Enter → Beat → Rest → Click), role→clip map in `content/profile.json → character.clips`
-   with idle fallback, framing as data.
-3. **Phase 4:** one set piece per track (mostly 2D), royalty-free music per mood, credits.
+1. ~~Phase 3, story engine~~ **done 30 Oct** (uncommitted when written): pinned tracks beside a sticky stage, player bar
+   with vinyl progress ring and autoplay, role-based choreography (`src/choreo.js`), chair/desk props, a set piece
+   per track, click → wave (seated wave when sitting), 5 clicks or the vinyl → dance. Missing clips: Looking Around
+   and Victory (mapped to think and dance in `profile.json → character.clips`).
+3. **Phase 4:** richer set pieces, royalty-free music per mood, credits.
 4. **Phase 5:** design-skill gate (`.claude/skills/design-taste-frontend`, `inspect.mjs` at 1440/768/390), reduced
    motion, performance, Skills sphere refinement, Contact page.
 

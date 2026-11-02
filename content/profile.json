@@ -23,7 +23,11 @@
   "timezoneLabel": "IST",
   "character": {
     "model": "models/bhavay.glb",
-    "backgroundOpacity": 0.4
+    "backgroundOpacity": 0.4,
+    "clips": {
+      "victory": "dance",
+      "lookAround": "think"
+    }
   },
   "landingLine": "Developer turned AI project manager. My friends call me Bunny."
 }

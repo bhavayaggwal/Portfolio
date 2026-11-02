@@ -22,6 +22,18 @@ const CLIPS = {
   sitDown: "Sitting.fbx",
   sitIdle: "Sitting Idle.fbx",
   sitTalk: "Sitting Talking.fbx",
+  sitClap: "Sitting Clap.fbx",
+  standUp: "Stand Up.fbx",
+  type: "Typing.fbx",
+  nod: "Head Nod Yes.fbx",
+  smirkNod: "Sarcastic Head Nod.fbx",
+  surprised: "Surprised.fbx",
+  think: "Thinking.fbx",
+  talk: "Talking.fbx",
+  shrug: "Shrugging.fbx",
+  bow: "Quick Informal Bow.fbx",
+  catwalk: "Catwalk Walk Forward 03.fbx",
+  dance: "Silly Dancing.fbx",
 };
 
 const log = (msg) => { document.getElementById("log").textContent += msg + "\n"; console.log("[merge]", msg); };

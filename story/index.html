@@ -3,32 +3,32 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Story · Bhavay Aggarwal</title>
+  <title>The Adventures of Bunny · Bhavay Aggarwal</title>
   <meta name="description" content="The Adventures of Bunny: Bhavay Aggarwal's journey through code, curiosity, and the soundtrack that carried it all." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231A1816'/><text x='16' y='22' font-family='Georgia,serif' font-size='18' fill='%23F5F1EA' text-anchor='middle'>B</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230c0a08'/><text x='16' y='23' font-family='sans-serif' font-size='19' fill='%23c9a45a' text-anchor='middle'>B</text></svg>" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500&display=swap" rel="stylesheet" />
 </head>
 <body data-root="../" class="is-story">
-  <main id="main" class="story">
-    <div class="story-body">
-      <!-- The stage: set pieces behind, the 3D character (src/figure.js) drawn over them -->
-      <figure class="story-stage figure-slot" id="figure-slot" tabindex="0" role="img" aria-label="Bhavay's 3D character acting out the current track. Click him or press Enter and he waves back.">
-        <div class="set" id="set" aria-hidden="true"></div>
+  <main id="main">
+    <div class="wrap story-body">
+      <!-- The stage: set pieces behind and in front, the 3D character (src/figure.js) between them -->
+      <figure class="story-stage figure-slot" id="figure-slot" tabindex="0" role="img" aria-label="Bunny, Bhavay's 3D character, acting out the current track. Click him or press Enter and he waves back.">
+        <div class="set back" id="set-back" aria-hidden="true"></div>
+        <div class="set front" id="set-front" aria-hidden="true"></div>
         <span class="figure-hint" id="stage-hint">Click Bunny to say hi</span>
-        <span class="figure-fallback display" aria-hidden="true">BA</span>
+        <span class="figure-fallback"><img src="../stills/wave.webp" width="1200" height="1500" alt="" loading="lazy" /></span>
       </figure>
       <div class="story-col">
         <header class="story-head">
-          <h1 class="display" id="album"></h1>
+          <h1 id="album"></h1>
           <p class="lede" id="subtitle"></p>
         </header>
         <ol class="tracks" id="tracks"></ol>
         <section class="debrief" id="debrief">
-          <h2 class="display" id="ending-title"></h2>
-          <p id="ending-text"></p>
+          <h2 id="ending-title"></h2>
+          <p class="lede" id="ending-text"></p>
           <div class="cta-row" id="ending-links"></div>
         </section>
       </div>
@@ -40,12 +40,9 @@
         <circle class="ring-bg" cx="24" cy="24" r="22" />
         <circle class="ring" id="ring" cx="24" cy="24" r="22" pathLength="100" />
       </svg>
-      <span class="disc"></span>
+      <span class="label"></span>
     </button>
-    <div class="now">
-      <strong id="now-title"></strong>
-      <span id="now-mood"></span>
-    </div>
+    <p class="now" id="now" aria-live="polite"></p>
     <div class="controls">
       <button class="icon-btn" id="prev" aria-label="Previous track"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 5v14M19 5 9 12l10 7z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
       <button class="icon-btn play-btn" id="play" aria-label="Play the story"><svg class="i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg><svg class="i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg></button>

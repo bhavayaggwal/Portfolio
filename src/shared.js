@@ -7,14 +7,14 @@ import C, { root } from "./content.js";
 export const $ = (s, el = document) => el.querySelector(s);
 export const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Copy from the admin can mark key words as *like this*; they show with a red highlight.
+export const hl = (s) => esc(s).replace(/\*([^*\n]+)\*/g, "<mark>$1</mark>");
 export const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export const PAGES = [
-  { id: "home", label: "Home", href: "", nav: false }, // reached through the name in the header
+  { id: "home", label: "Home", href: "", nav: false }, // reached through the name in the bar
   { id: "story", label: "Story", href: "story/" },
   { id: "work", label: "Work", href: "work/" },
-  { id: "papers", label: "Papers", href: "papers/" },
-  { id: "skills", label: "Skills", href: "skills/" },
   { id: "contact", label: "Contact", href: "contact/" },
 ];
 export const pageUrl = (id) => root + PAGES.find((p) => p.id === id).href;
@@ -37,6 +37,24 @@ export async function copyEmail() {
   } catch {
     location.href = "mailto:" + C.profile.email;
   }
+}
+
+/* ---------- Project cards (Home carousel, Work page) ---------- */
+export const ago = (iso) => {
+  const d = (Date.now() - new Date(iso)) / 864e5;
+  if (d < 1) return "today";
+  if (d < 2) return "yesterday";
+  if (d < 30) return Math.round(d) + " days ago";
+  if (d < 365) return Math.round(d / 30) + " months ago";
+  return Math.round(d / 365) + " years ago";
+};
+// One project as a raised card; `r` is its live GitHub repo when we have it. Opens in a new tab.
+export function projectCard(p, r) {
+  const href = r ? r.html_url : `${C.profile.links.github}/${p.repo}`;
+  const fact = r ? `${r.language || "Code"}, updated ${ago(r.pushed_at)}` : (p.stats || [])[0] || "";
+  return `<a class="card" href="${esc(href)}" target="_blank" rel="noopener" draggable="false">
+    ${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" draggable="false" />` : ""}
+    <h3>${esc(p.title)}</h3><p>${esc(p.blurb)}</p><span class="stack">${esc((p.stack || []).join(", "))}</span><span class="fact">${esc(fact)}</span></a>`;
 }
 
 /* ---------- Scrolling ---------- */
@@ -72,46 +90,42 @@ export function observeReveals() {
 }
 
 /* ---------- Shell ---------- */
-const ICON_SUN = `<svg class="sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.6"/></svg>`;
-const ICON_MOON = `<svg class="moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
-
 /**
- * Builds the header, footer, command menu and toast around the page, and wires the shared behaviour.
+ * Builds the bar, footer, command menu and toast around the page, and wires the shared behaviour.
  * @param {string} pageId  one of PAGES[].id, marks the current link
  * @param {{actions?: Array<[string, string, Function]>}} opts  extra command-menu entries for this page
  */
 export function initShell(pageId, { actions = [] } = {}) {
   const p = C.profile;
+  document.documentElement.classList.add("js"); // reveals may hide content only once the script runs
+  const nav = PAGES.filter((pg) => pg.nav !== false);
   document.body.insertAdjacentHTML("afterbegin", `
     <a class="skip" href="#main">Skip to content</a>
-    <header class="topbar">
-      <a class="brand" href="${pageUrl("home")}">
-        ${p.avatar ? `<img src="${esc(p.avatar)}" alt="" width="32" height="32" />`
-          : `<span class="monogram" aria-hidden="true">${esc(p.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2))}</span>`}
-        <span><strong>${esc(p.name)}</strong><small>${esc(p.role)}</small></span>
-      </a>
+    <header class="bar"><div class="wrap">
+      <a class="wordmark" href="${pageUrl("home")}"${pageId === "home" ? ' aria-current="page"' : ""}>${esc(p.name)}</a>
       <nav class="nav" aria-label="Pages">
-        ${PAGES.filter((pg) => pg.nav !== false).map((pg) => `<a href="${pageUrl(pg.id)}"${pg.id === pageId ? ' aria-current="page" class="active"' : ""}>${pg.label}</a>`).join("")}
+        ${nav.map((pg) => `<a href="${pageUrl(pg.id)}"${pg.id === pageId ? ' aria-current="page"' : ""}>${pg.label}</a>`).join("")}
       </nav>
-      <div class="tools">
-        <span class="clock mono" id="clock" aria-live="off"></span>
-        <button class="kbd-btn mono" id="open-palette" aria-label="Open command menu">⌕ <kbd>Ctrl K</kbd></button>
-        <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">${ICON_SUN}${ICON_MOON}</button>
-      </div>
-    </header>`);
+    </div></header>`);
   document.body.insertAdjacentHTML("beforeend", `
-    <footer class="footer mono">
-      <span>© ${new Date().getFullYear()} ${esc(p.name)}</span>
-      <nav aria-label="Footer">${PAGES.filter((pg) => pg.nav !== false).map((pg) => `<a href="${pageUrl(pg.id)}">${pg.label}</a>`).join(" · ")}</nav>
-    </footer>
+    <footer class="foot"><div class="wrap">
+      <div class="foot-cols">
+        <div><p>Pages</p>${PAGES.map((pg) => `<a href="${pageUrl(pg.id)}">${pg.label}</a>`).join("")}</div>
+        <div><p>Elsewhere</p><a href="${esc(p.links.github)}" target="_blank" rel="noopener">GitHub</a><a href="${esc(p.links.linkedin)}" target="_blank" rel="noopener">LinkedIn</a></div>
+        <div><p>Write</p><a href="mailto:${esc(p.email)}">${esc(p.email)}</a><a href="${pageUrl("contact")}">Contact form</a></div>
+        <div><p>Based in</p><span>${esc(p.location)}, <span id="clock"></span></span></div>
+      </div>
+      <span></span>
+      <p class="foot-mark" aria-hidden="true">${esc(p.name)}</p>
+      <p class="foot-legal">© ${new Date().getFullYear()} ${esc(p.name)}. Press Ctrl K for the menu.</p>
+    </div></footer>
     <div class="palette" id="palette" hidden>
       <div class="palette-box" role="dialog" aria-modal="true" aria-label="Command menu">
-        <input id="palette-input" type="text" placeholder="Go to a page or run an action…" autocomplete="off" aria-controls="palette-list" />
+        <input id="palette-input" type="text" placeholder="Go to a page or run an action" autocomplete="off" aria-label="Search pages and actions" aria-controls="palette-list" />
         <ul id="palette-list" role="listbox" data-lenis-prevent></ul>
-        <p class="mono palette-foot">↑↓ to move · Enter to run · Esc to close</p>
       </div>
     </div>
-    <div class="toast mono" id="toast" role="status" aria-live="polite"></div>`);
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>`);
 
   /* smooth scrolling */
   lenis = !reduceMotion ? new Lenis({ lerp: 0.085, wheelMultiplier: 0.9 }) : null;
@@ -128,28 +142,14 @@ export function initShell(pageId, { actions = [] } = {}) {
     e.preventDefault();
     scrollToEl(el);
   });
-  const topbar = $(".topbar");
-  addEventListener("scroll", () => topbar.classList.toggle("scrolled", scrollY > 8), { passive: true });
 
-  /* clock */
+  /* clock in the footer */
   const clock = $("#clock");
-  const tick = () => {
-    const t = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: p.timezone }).format(new Date());
-    clock.textContent = `${p.location} · ${t} ${p.timezoneLabel}`;
-  };
+  const tick = () => (clock.textContent = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: p.timezone }).format(new Date()) + " " + p.timezoneLabel);
   tick();
   setInterval(tick, 15000);
 
-  /* theme */
-  const html = document.documentElement;
-  const isDark = () => html.dataset.theme ? html.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  function toggleTheme() {
-    html.dataset.theme = isDark() ? "light" : "dark";
-    try { localStorage.setItem("theme", html.dataset.theme); } catch {}
-  }
-  $("#theme-toggle").addEventListener("click", toggleTheme);
-
-  /* command menu */
+  /* command menu (Ctrl K or /) */
   const pal = $("#palette"), input = $("#palette-input"), plist = $("#palette-list");
   const all = [
     ...PAGES.filter((pg) => pg.id !== pageId).map((pg) => [pg.label, "Page", () => (location.href = pageUrl(pg.id))]),
@@ -158,7 +158,6 @@ export function initShell(pageId, { actions = [] } = {}) {
     ...(p.resumeFile ? [["Download résumé", "Action", () => window.open(p.resumeFile, "_blank", "noopener")]] : []),
     ["Open GitHub", "Link", () => window.open(p.links.github, "_blank", "noopener")],
     ["Open LinkedIn", "Link", () => window.open(p.links.linkedin, "_blank", "noopener")],
-    ["Toggle dark mode", "Action", toggleTheme],
   ];
   let filtered = all, sel = 0, lastFocus;
   function renderPalette() {
@@ -166,7 +165,7 @@ export function initShell(pageId, { actions = [] } = {}) {
     filtered = all.filter((a) => a[0].toLowerCase().includes(q) || a[1].toLowerCase().includes(q));
     sel = Math.min(sel, Math.max(0, filtered.length - 1));
     plist.innerHTML = filtered.length
-      ? filtered.map((a, i) => `<li role="option" data-i="${i}" aria-selected="${i === sel}"><span>${esc(a[0])}</span><span class="mono">${esc(a[1])}</span></li>`).join("")
+      ? filtered.map((a, i) => `<li role="option" data-i="${i}" aria-selected="${i === sel}"><span>${esc(a[0])}</span><span>${esc(a[1])}</span></li>`).join("")
       : `<li><span>No matches</span></li>`;
     const s = $('[aria-selected="true"]', plist);
     if (s) s.scrollIntoView({ block: "nearest" });
@@ -174,7 +173,6 @@ export function initShell(pageId, { actions = [] } = {}) {
   function openPalette() { lastFocus = document.activeElement; pal.hidden = false; if (lenis) lenis.stop(); input.value = ""; sel = 0; renderPalette(); input.focus(); }
   function closePalette() { pal.hidden = true; if (lenis) lenis.start(); if (lastFocus) lastFocus.focus({ preventScroll: true }); }
   function run(i) { const a = filtered[i]; if (!a) return; closePalette(); a[2](); }
-  $("#open-palette").addEventListener("click", openPalette);
   input.addEventListener("input", () => { sel = 0; renderPalette(); });
   input.addEventListener("keydown", (e) => {
     if (e.key === "ArrowDown") { e.preventDefault(); sel = (sel + 1) % (filtered.length || 1); renderPalette(); }
@@ -189,7 +187,6 @@ export function initShell(pageId, { actions = [] } = {}) {
     else if (e.key === "Escape" && !pal.hidden) closePalette();
     else if (e.key === "/" && pal.hidden && !e.target.closest?.("input, textarea")) { e.preventDefault(); openPalette(); }
   });
-  if (/Mac|iPhone|iPad/.test(navigator.platform)) $("#open-palette kbd").textContent = "⌘K";
 
   return { lenis };
 }

@@ -1,8 +1,8 @@
 // Site content lives in /content/*.json, edited through the admin (/admin/) or by hand.
 // This module gathers those files into one object for the page. Everything imported here ships
-// in the public JS, so only import files a page actually shows (highlights.json and
-// experience.json are left out until they get a page).
+// in the public JS, so only import files a page actually shows (highlights.json is left out).
 import profile from "../content/profile.json";
+import experience from "../content/experience.json";
 import projects from "../content/projects.json";
 import skills from "../content/skills.json";
 import research from "../content/research.json";
@@ -26,6 +26,7 @@ const C = {
   },
   summary: profile.summary,
   figure: { ...profile.character, model: asset(profile.character.model) },
+  experience: experience.roles,
   projects: projects.featured.map((p) => ({ ...p, image: asset(p.image) })),
   hiddenRepos: projects.hiddenRepos || [],
   skills: Object.fromEntries(skills.groups.map((g) => [g.name, g.items])),

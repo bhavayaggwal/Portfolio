@@ -92,3 +92,29 @@ beside it.
 - **Project screenshots** for ASL Translation, Fashion Recommendation, Business Simulator and SceneForge, or the OK to
   capture them from the repos and READMEs.
 - OK to commit the current phase-3 work as the baseline.
+
+## Round 2 (3 Nov 2026): palette, neumorphism, motion
+Requested by Bhavay; checked by Ponytail (smallest change) and Hallmark (gates) before building.
+- **Palette:** #000, #454545, #005cff, #bd0000, #fff only. Dark neumorphism: ground #232323 (even mix of black and
+  grey); surfaces share the ground and are raised or pressed by two shadow tokens (`--raise`, `--press`), light from
+  the top left in grey, shade to the bottom right in black. Blue fills the main action (white on blue 5.8:1); red is
+  the signal (Live chip, record label, form errors, the dance toast). Blue and red are never used as text on the ground.
+- **Taste skill:** its "no shadows at rest" rule is waived on request (neumorphism is built from shadows); inspect with
+  `--allow shadow,button-fx`. The dark-room lamp light is gone.
+- **Home:** Bunny dances live behind the hero (dimmed), then flies into the story box as you scroll (idle in flight,
+  a wave on landing); the big name flies into the bar's name and fades; the four-chapter band is gone; the skill
+  cluster has no box; Selected work is a scroll-snap carousel (buttons, mouse drag; no library).
+- **Links:** every project and GitHub/LinkedIn link opens in a new tab.
+- **Figure:** stops drawing when off screen or when the tab is hidden.
+- **Smooth scroll:** already Lenis; it turns itself off when the OS asks for reduced motion.
+- **Contact:** Web3Forms key in `content/profile.json → formKey`; the form now sends.
+- **Checks:** Hallmark finds no neumorphism problems (no glow, contrast or field-edge fails). Remaining meter notes:
+  the 3D canvas and same-colour neumorphic surfaces read as "empty" to the taste inspector; no project pictures yet.
+
+## Round 3 (3 Nov 2026): black ground, red key words
+- Ground is pure black. Raised things use `--surface` (#080808, lit top-left in grey); pressed wells use `--well`
+  (#0f0f0f). The footer is `--surface`.
+- Red marks key words: `*word*` in the content (or `<mark>` in page HTML) shows a red band behind white text
+  (6.6:1; red text alone would be 3:1 on black). Admin hints on the landing line, track lead and text explain it.
+- Landing: the story box is gone; Bunny lands in an empty spot beside the copy, brighter in the background (70%).
+- Hallmark rendered check: no contrast, focus-ring or glow failures.

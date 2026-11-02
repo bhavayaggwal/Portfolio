@@ -4,25 +4,54 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Work · Bhavay Aggarwal</title>
-  <meta name="description" content="Projects and public GitHub repositories by Bhavay Aggarwal." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231A1816'/><text x='16' y='22' font-family='Georgia,serif' font-size='18' fill='%23F5F1EA' text-anchor='middle'>B</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <meta name="description" content="Bhavay Aggarwal's projects with live GitHub numbers, his work history, publications and education." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230c0a08'/><text x='16' y='23' font-family='sans-serif' font-size='19' fill='%23c9a45a' text-anchor='middle'>B</text></svg>" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500&display=swap" rel="stylesheet" />
 </head>
-<body data-root="../">
+<body data-root="../" class="is-work">
   <main id="main">
-    <section class="section page-first">
-      <div class="section-head">
-        <h1 class="display">Work</h1>
-        <p class="hint mono" id="gh-status">Live from GitHub</p>
+    <header class="wrap page-head">
+      <h1>Work</h1>
+      <p class="lede">What I've <mark>built</mark>, where I've worked, and what I've published, with live numbers from my GitHub.</p>
+    </header>
+
+    <section class="wrap home-section first" aria-labelledby="gh-h">
+      <h2 id="gh-h" class="reveal">From GitHub <span class="chip">Live</span></h2>
+      <dl class="stats" id="gh-stats">
+        <div><dt>Public repositories</dt><dd id="s-repos">…</dd></div>
+        <div><dt>Stars, all repositories</dt><dd id="s-stars">…</dd></div>
+        <div><dt>Most used language</dt><dd id="s-langs">…</dd></div>
+        <div><dt>Last push</dt><dd id="s-push">…</dd></div>
+      </dl>
+      <p class="stats-note soft" id="gh-status">Loading from github.com/<span id="gh-user"></span>.</p>
+    </section>
+
+    <section class="home-section" aria-labelledby="projects-h">
+      <div class="wrap"><h2 id="projects-h" class="reveal">Projects</h2></div>
+      <div class="wrap">
+        <ul class="cards" id="cards"></ul>
+        <details class="repo-more" id="repo-more" hidden>
+          <summary>More from GitHub <span id="more-count"></span></summary>
+          <ul id="more-repos"></ul>
+        </details>
+        <p class="repo-all"><a class="link" id="gh-all" href="#" target="_blank" rel="noopener">Everything else is on GitHub</a></p>
       </div>
-      <div class="projects" id="projects-grid"></div>
-      <details class="more-repos">
-        <summary class="mono">More from GitHub <span id="more-count"></span></summary>
-        <ul id="more-repos"></ul>
-      </details>
+    </section>
+
+    <section class="wrap home-section" aria-labelledby="history-h">
+      <h2 id="history-h" class="reveal">Work history</h2>
+      <ol class="roles" id="roles"></ol>
+    </section>
+
+    <section class="wrap home-section" aria-labelledby="record-h">
+      <h2 id="record-h" class="reveal">Published, studied, recognised</h2>
+      <div class="record">
+        <div><h3>Publications</h3><ul id="publications"></ul></div>
+        <div><h3>Education</h3><ul id="education"></ul></div>
+        <div><h3>Recognition</h3><ul id="achievements"></ul></div>
+      </div>
     </section>
   </main>
   <script type="module" src="/src/pages/work.js"></script>

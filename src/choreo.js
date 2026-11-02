@@ -1,17 +1,19 @@
 /* Choreography: turns a track's list of roles (content/story.json → actions) into moves for the figure.
    Roles play in order and the last one repeats. The director handles the in-between steps itself:
-   standing up before a standing role, sitting down before a seated one, and walking on and off stage.
+   standing up before a standing role, sitting down before a seated one, and walking between marks.
    Roles map to clips through content/profile.json → character.clips (missing clips fall back to idle). */
 
 // Roles performed sitting down; everything else is performed standing.
 const SEATED = new Set(["sitDown", "sitIdle", "sitTalk", "type", "sitClap"]);
-const OFFSTAGE = 3; // x (or depth) just outside the stage
+// Two marks on stage: each walk goes to the other one, so the figure never leaves the stage or its frame.
+const MARKS = [-0.55, 0.55];
+const QUICK = 1.6; // sitting down and standing up play faster than Mixamo's originals
 
-export function createDirector(fig) {
-  let run = 0, restRole = "idle", groove = false;
+export function createDirector(fig, { onRole } = {}) {
+  let run = 0, restRole = "idle", groove = false, mark = 0;
   const live = (id) => id === run;
 
-  const once = (role) => fig.play(fig.clipFor(role), { once: true });
+  const once = (role, speed) => fig.play(fig.clipFor(role), { once: true, speed });
   function rest(role) {
     restRole = role;
     fig.setRest(fig.clipFor(groove && role === "idle" ? "nod" : role));
@@ -20,28 +22,26 @@ export function createDirector(fig) {
   async function sitDown() {
     fig.setProp("chair", true);
     fig.posture = "seated";
-    await once("sitDown");
+    await once("sitDown", QUICK);
     rest("sitIdle");
   }
   async function standUp() {
     fig.setProp("desk", false);
     fig.posture = "standing";
-    await once("standUp");
+    await once("standUp", QUICK);
     fig.setProp("chair", false);
     rest("idle");
   }
-  // Walk off to the right, then in from the left: the scene changes while the stage is empty.
-  async function walkIn(id) {
-    if (Math.abs(fig.position.x) < OFFSTAGE - 0.1) await fig.walk({ x: OFFSTAGE, z: 0 }, { seconds: 1.3 });
-    if (!live(id)) return;
-    fig.place(-OFFSTAGE, 0);
-    await fig.walk({ x: 0, z: 0 }, { seconds: 1.8 });
+  function walkIn() {
+    mark = 1 - mark;
+    return fig.walk({ x: MARKS[mark], z: 0 }, { seconds: 1.4 });
   }
+  // Walk upstage with the back turned, then come down the runway
   async function catwalk(id) {
-    if (Math.abs(fig.position.x) < OFFSTAGE - 0.1) await fig.walk({ x: OFFSTAGE, z: 0 }, { seconds: 1.3 });
+    await fig.walk({ x: 0, z: -3.5 }, { seconds: 1.3 });
     if (!live(id)) return;
-    fig.place(0, -9);
-    await fig.walk({ x: 0, z: 0 }, { seconds: 3.4, clip: fig.clipFor("catwalk") === "idle" ? "walk" : fig.clipFor("catwalk") });
+    const clip = fig.clipFor("catwalk") === "idle" ? "walk" : fig.clipFor("catwalk");
+    await fig.walk({ x: 0, z: 0 }, { seconds: 2.4, clip });
   }
 
   async function perform(role, id, last) {
@@ -50,7 +50,8 @@ export function createDirector(fig) {
     else if (fig.posture !== "seated" && seated && role !== "sitDown") await sitDown();
     if (!live(id)) return;
     fig.setProp("desk", role === "type");
-    if (role === "walkIn") return walkIn(id);
+    onRole?.(role);
+    if (role === "walkIn") return walkIn();
     if (role === "catwalk") return catwalk(id);
     if (role === "sitDown") return fig.posture === "seated" ? undefined : sitDown();
     if (role === "standUp") return;
@@ -59,7 +60,7 @@ export function createDirector(fig) {
   }
 
   return {
-    // Play a track's roles in order; a newer call cancels the one before.
+    // Play a list of roles in order; a newer call cancels the one before.
     async perform(roles = ["idle"]) {
       const id = ++run;
       await fig.ready;
@@ -74,6 +75,5 @@ export function createDirector(fig) {
       groove = on;
       if (restRole === "idle") rest("idle");
     },
-    once,
   };
 }

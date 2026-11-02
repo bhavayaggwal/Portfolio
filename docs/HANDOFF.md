@@ -1,4 +1,4 @@
-# Handoff: where the portfolio stands (30 Oct 2026)
+# Handoff: where the portfolio stands (2 Nov 2026)
 
 Read this first when picking the work back up. Companion docs: `PLAN.md` (plan and decisions),
 `STORY-MAP.md` (choreography and the Mixamo motion list), `story-vision.md` (the original "Adventures of Bunny" text).
@@ -58,11 +58,25 @@ npm run dev          # http://localhost:8080   (admin: /admin/index.html, rig to
    Settings: FBX Binary, Without Skin, 30 fps, In Place for walks, Character Arm-Space ~55–65 (same on every clip).
 2. A new résumé without the phone number (PDF), uploaded via admin → Profile → Résumé file (button hidden until then).
 
-## Redesign (2 Nov 2026): work from here next
-The plan is `docs/REDESIGN.md`: pages Home → Story → Work → Contact, taste-skill direction "The dark room"
-(warm black and gold, Clash Grotesk), Web3Forms contact form, audit fixes from the taste skill, Hallmark and
-Ponytail. It folds in the phase 3 review below. Waiting on Bhavay: the Web3Forms key, project screenshots, and the
-OK to commit phase 3 as the baseline.
+## Redesign (2–3 Nov 2026): built, not committed (see REDESIGN.md, Round 2 for the neumorphic palette)
+Plan: `docs/REDESIGN.md`. Baseline commit before it: `5575a2c` (local, not pushed).
+- **Pages:** Home → Story → Work → Contact. Papers and Skills pages are in `dump/redesign-2026-11/` (with the old CSS and pages).
+- **Look:** taste-skill direction "The dark room" (warm black, gold for the one main action, Clash Grotesk only, five sizes).
+- **Home:** lamp-lit still + name; Bunny pointing at "Play my story" (live 3D) + band of four track stills; skill cluster
+  (`src/sphere.js`) with group list; three project panels; email as display type; wordmark footer on every page.
+- **Story:** copy left, stage right; flat set pieces in the palette with a front layer; Bunny walks between two marks
+  (never offstage); faster sit/stand; "Hello, World!" cued off the `type` role; player shows the mood; pins open on click.
+- **Work:** live GitHub numbers, project panels with live repo lines, work history (CavinKare removed from
+  `experience.json`), publications/education/recognition.
+- **Contact:** Web3Forms form. **Key placeholder:** `content/profile.json → formKey` (admin: Profile → Contact form key).
+  Empty key = the form opens the visitor's mail app.
+- **Stills:** `tools/stills/` renders `public/stills/*.webp` from the model (run it after changing the model or palette).
+- **Placeholders waiting on Bhavay:** Web3Forms key; project screenshots (admin: Projects → Image).
+- **Checks:** taste lint 0 FAIL; inspector Home 0 FAIL, others only pictures/player-bar (see `.taste-skill/after/critique.md`);
+  Hallmark: remaining items are its stamp convention and measured tool limits.
+- **Not yet done:** an interactive click-through in a visible Chrome window (Chrome was throttled to ~1 fps during the
+  build, so choreography timing must be checked live); commit and push.
+- Old /papers/ and /skills/ URLs will 404 on the live site after the next push.
 
 ## Review of phase 3 (Bhavay, 30 Oct 2026)
 Phase 3 is built but **uncommitted**. Bhavay reviewed it at localhost.

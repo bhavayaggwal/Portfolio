@@ -1,6 +1,7 @@
 {
   "name": "Bhavay Aggarwal",
   "role": "AI Project Manager",
+  "landingLine": "Developer turned *AI project manager*. My friends call me *Bunny*.",
   "tagline": [
     "Innovator",
     "Developer",
@@ -11,6 +12,7 @@
   "status": "On a Coffee Break",
   "photo": "",
   "email": "agg.bhavay@gmail.com",
+  "formKey": "aefb2140-5c46-47f5-8403-7fd6dd83a9e0",
   "phone": "",
   "showPhone": false,
   "resumeFile": "",
@@ -25,9 +27,8 @@
     "model": "models/bhavay.glb",
     "backgroundOpacity": 0.4,
     "clips": {
-      "victory": "dance",
-      "lookAround": "think"
+      "lookAround": "think",
+      "victory": "dance"
     }
-  },
-  "landingLine": "Developer turned AI project manager. My friends call me Bunny."
+  }
 }

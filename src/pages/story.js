@@ -1,10 +1,10 @@
 /* Story page: "The Adventures of Bunny", told as album tracks.
    Each track is a tall section whose copy stays pinned while the stage plays it: the set piece changes,
-   the character performs the track's roles (src/choreo.js), and the player bar shows what's on.
+   the character performs the track's roles (src/choreo.js), and the player bar shows the track's mood.
    Press play and the album plays itself: it moves to the next track after a reading pause, the
    character nods along, and the track's music plays if one has been added in the admin. */
 import C, { asset } from "../content.js";
-import { initShell, $, $$, esc, pageUrl, scrollToEl, copyEmail, toast, reduceMotion } from "../shared.js";
+import { initShell, $, $$, esc, hl, pageUrl, scrollToEl, copyEmail, toast, reduceMotion } from "../shared.js";
 import { createDirector } from "../choreo.js";
 
 const S = C.story, T = S.tracks;
@@ -18,54 +18,77 @@ initShell("story", {
 
 /* ---------- Copy ---------- */
 $("#album").textContent = S.album;
-$("#subtitle").textContent = S.subtitle;
+$("#subtitle").innerHTML = hl(S.subtitle);
 
 // "58% → 78%" counts up from the first number to the second when its track plays
-const statHtml = (s) => esc(s).replace(/(\d+)%\s*→\s*(\d+)%/, (_, a, b) => `${a}% → <span class="count" data-from="${a}" data-to="${b}">${a}</span>%`);
+const statHtml = (s) => esc(s).replace(/(\d+)%\s*→\s*(\d+)%/, (_, a, b) => `${a}% → <span class="count" data-from="${a}" data-to="${b}">${b}</span>%`);
 $("#tracks").innerHTML = T.map((t, i) => `
   <li class="track" id="${esc(t.id)}" data-i="${i}">
     <div class="track-copy">
       <h2>${esc(t.title)}</h2>
-      <p class="track-lead">${esc(t.lead)}</p>
-      <p>${esc(t.text)}</p>
-      ${i === 0 ? `<button class="btn primary press-play" data-play><span aria-hidden="true">▶</span> Press play</button>` : ""}
-      ${t.pins?.length ? `<ul class="pins">${t.pins.map((p, j) => `<li style="--tilt:${((j * 37) % 7) - 3}deg"><button data-pin="${j}"><b>${esc(p.title)}</b><span>${esc(p.text)}</span></button></li>`).join("")}</ul>` : ""}
+      <p class="track-lead">${hl(t.lead)}</p>
+      <p>${hl(t.text)}</p>
+      ${i === 0 ? `<button class="btn primary" data-play>Press play</button>` : ""}
+      ${t.pins?.length ? `<ul class="pins">${t.pins.map((p, j) => `<li><button aria-expanded="false" data-pin="${j}"><b>${esc(p.title)}</b><span>${esc(p.text)}</span></button></li>`).join("")}</ul>` : ""}
       ${t.stat ? `<p class="sticker">${statHtml(t.stat)}</p>` : ""}
-      ${t.notes ? `<details class="liner"><summary>Liner notes</summary>${t.notes.split(/\n\n+/).map((para) => `<p>${esc(para)}</p>`).join("")}</details>` : ""}
+      ${t.notes ? `<details class="liner"><summary>Liner notes</summary>${t.notes.split(/\n\n+/).map((para) => `<p>${hl(para)}</p>`).join("")}</details>` : ""}
     </div>
   </li>`).join("");
 
 $("#ending-title").textContent = S.ending.title;
-$("#ending-text").textContent = S.ending.text;
-$("#ending-links").innerHTML = ["work", "papers", "skills"].map((id) => `<a class="btn" href="${pageUrl(id)}">${id[0].toUpperCase() + id.slice(1)} →</a>`).join("")
-  + `<button class="btn primary" id="say-hi">Say hi: ${esc(C.profile.email)}</button>`;
+$("#ending-text").innerHTML = hl(S.ending.text);
+$("#ending-links").innerHTML = `<a class="btn primary" href="${pageUrl("contact")}">Write to me</a>`
+  + `<a class="btn" href="${pageUrl("work")}">See the work</a><button class="btn" id="say-hi">Copy my email</button>`;
 $("#say-hi").addEventListener("click", copyEmail);
 
-/* ---------- Set pieces (decorative, behind the character) ---------- */
-const SETS = {
-  play: () => `<div class="big-disc"></div>`,
-  corner: () => `<div class="lamp"></div><div class="notes"><i>♪</i><i>♫</i><i>♪</i><i>♬</i></div><p class="code-bubble"><code></code></p>`,
+/* ---------- Set pieces: flat drawings in the palette, behind (back) or in front of (front) the character ---------- */
+const fill = (v) => `style="fill:var(${v})"`;
+const record = (size, extra = "") => `<svg viewBox="0 0 100 100" ${extra}><g class="spins">
+  <circle cx="50" cy="50" r="50" ${fill("--black")}/>${[44, 38, 32, 26].map((r) => `<circle cx="50" cy="50" r="${r}" style="fill:none;stroke:var(--grey);stroke-width:.6"/>`).join("")}
+  <circle cx="50" cy="50" r="15" ${fill("--red")}/><circle cx="50" cy="50" r="2" ${fill("--black")}/><rect x="56" y="44" width="10" height="3" ${fill("--white")}/></g></svg>`;
+const BACK = {
+  play: () => record(0, `style="left:50%;top:6%;width:min(84%,56svh);translate:-50% 0"`),
+  corner: () => `<svg viewBox="0 0 100 100" preserveAspectRatio="none" style="inset:0;width:100%;height:100%"><rect x="21.6" y="0" width=".4" height="10" ${fill("--grey")}/><polygon points="18,10 26,10 29,15 15,15" ${fill("--white")}/></svg>`,
   board: (t) => `<div class="cork">${(t.pins || []).map((_, j) => `<i class="note" style="--tilt:${((j * 53) % 11) - 5}deg"></i>`).join("")}</div>`,
-  detour: () => `<svg class="road" viewBox="0 0 400 300" preserveAspectRatio="none"><path d="M-20 310 C 140 250, 40 150, 210 120 S 360 40, 430 10"/><path class="dash" d="M-20 310 C 140 250, 40 150, 210 120 S 360 40, 430 10"/></svg><div class="scratch-disc"></div>`,
-  portal: () => `<div class="streams">${Array.from({ length: 14 }, (_, j) => `<i style="--x:${j * 7.4 + 2}%;--d:${(j * 0.37) % 2.2}s;--s:${2.4 + (j % 4) * 0.6}s">${Array.from({ length: 12 }, (_, k) => (j * 7 + k * 3) % 2).join("")}</i>`).join("")}</div><div class="portal"></div>`,
-  runway: () => `<div class="spot"></div><div class="runway">${Array.from({ length: 8 }, (_, j) => `<i style="--j:${j}"></i>`).join("")}</div>`,
-  crossroads: () => `<svg class="paths" viewBox="0 0 400 300" preserveAspectRatio="none"><path d="M200 300 C 200 220, 120 190, 30 150"/><path d="M200 300 C 200 220, 280 190, 370 150"/></svg><div class="sign"><b class="flip"><span>The End</span><span>To be continued</span></b></div>`,
+  detour: () => `<svg viewBox="0 0 400 300" preserveAspectRatio="none" style="left:0;bottom:0;width:100%;height:60%"><path d="M-20 310 C 140 250, 40 150, 210 120 S 360 40, 430 10" style="fill:none;stroke:var(--grey);stroke-width:46"/><path class="road-dash" d="M-20 310 C 140 250, 40 150, 210 120 S 360 40, 430 10" style="fill:none;stroke:var(--white);stroke-width:3"/></svg>`,
+  portal: () => `<svg viewBox="0 0 100 100" style="left:50%;top:4%;width:min(86%,58svh);translate:-50% 0"><g class="spins" style="animation-play-state:running;animation-duration:12s"><circle cx="50" cy="50" r="44" style="fill:none;stroke:var(--blue);stroke-width:4;stroke-dasharray:40 12"/><circle cx="50" cy="50" r="38" style="fill:none;stroke:var(--grey);stroke-width:1.5"/></g></svg>`,
+  runway: () => `<svg viewBox="0 0 100 100" preserveAspectRatio="none" style="inset:0;width:100%;height:100%"><polygon points="38,62 62,62 80,100 20,100" ${fill("--grey")}/>${Array.from({ length: 6 }, (_, j) => { const y = 64 + j * 6.5, w = 12 + j * 3.2; return `<circle class="runway-light" style="--j:${j};fill:var(--white)" cx="${50 - w}" cy="${y}" r=".9"/><circle class="runway-light" style="--j:${j};fill:var(--white)" cx="${50 + w}" cy="${y}" r=".9"/>`; }).join("")}</svg>`,
+  crossroads: () => `<svg viewBox="0 0 400 300" preserveAspectRatio="none" style="left:0;bottom:0;width:100%;height:56%"><path d="M200 300 C 200 220, 120 190, 30 150" style="fill:none;stroke:var(--blue);stroke-width:4"/><path d="M200 300 C 200 220, 280 190, 370 150" style="fill:none;stroke:var(--grey);stroke-width:4"/></svg>`,
 };
-$("#set").innerHTML = T.map((t, i) => `<div class="scene scene-${esc(t.scene)}" data-i="${i}">${(SETS[t.scene] || (() => ""))(t)}</div>`).join("")
-  + `<div class="scene scene-crossroads" data-i="${ENDING}">${SETS.crossroads()}</div>`;
+const FRONT = {
+  corner: () => `<p class="code-bubble"><code></code></p>`,
+  detour: () => record(0, `class="scratch-disc" style="right:6%;top:6%;width:22%"`),
+  crossroads: () => `<div class="sign"><b class="flip">The End</b></div>`,
+};
+const layer = (sets, scene, t, i) => `<div class="scene scene-${esc(scene)}" data-i="${i}">${(sets[scene] || (() => ""))(t)}</div>`;
+$("#set-back").innerHTML = T.map((t, i) => layer(BACK, t.scene, t, i)).join("") + layer(BACK, "crossroads", {}, ENDING);
+$("#set-front").innerHTML = T.map((t, i) => layer(FRONT, t.scene, t, i)).join("") + layer(FRONT, "crossroads", {}, ENDING);
+const scenes = (i) => $$(`.scene[data-i="${i}"]`);
 
 /* ---------- Character ---------- */
 let fig = null, director = null;
-const wide = matchMedia("(min-width: 821px)");
+const wide = matchMedia("(min-width: 901px)");
 const pokes = [];
 function dance(msg) {
   if (!fig) return;
   fig.react("dance");
   toast(msg);
 }
+// The first line of code appears once the laptop is on the desk
+function onRole(role) {
+  if (role !== "type") return;
+  const s = scenes(active).find((el) => $(".code-bubble", el));
+  if (!s) return;
+  const code = $(".code-bubble code", s), text = 'print("Hello, World!")';
+  code.textContent = "";
+  later(() => {
+    s.classList.add("typed");
+    if (reduceMotion) { code.textContent = text; return; }
+    [...text].forEach((ch, k) => later(() => (code.textContent += ch), k * 75));
+  }, reduceMotion ? 0 : 700);
+}
 import("../figure.js").then(({ initFigure }) => {
   fig = initFigure(C.figure, {
-    docked: true,
     turn: wide.matches ? -0.22 : 0, // turned a little toward the copy
     onPoke() {
       $("#stage-hint").classList.add("gone");
@@ -76,7 +99,7 @@ import("../figure.js").then(({ initFigure }) => {
     },
   });
   if (!fig) return;
-  director = createDirector(fig);
+  director = createDirector(fig, { onRole });
   director.setGroove(playing);
   if (active >= 0) director.perform(rolesFor(active));
 });
@@ -93,30 +116,20 @@ function enter(i) {
   active = i;
   timers.splice(0).forEach(clearTimeout);
   $$(".scene").forEach((s) => s.classList.toggle("on", +s.dataset.i === i));
+  $$(".scene.typed").forEach((s) => s.classList.remove("typed"));
   trackEls.forEach((el, j) => el.classList.toggle("current", j === i));
   const t = T[i];
-  $("#now-title").textContent = t ? t.title : S.ending.title;
-  $("#now-mood").textContent = t ? t.mood || "" : "Thanks for listening";
+  $("#now").textContent = t ? t.mood || t.title : "Thanks for listening";
   if (director) director.perform(rolesFor(i));
   if (t) sceneCue(t, i);
+  if (i === ENDING || t?.scene === "crossroads") flip();
   music(i);
   schedule();
 }
 
-// One-off moments for a scene, timed to the choreography
+// One-off moments for a scene
 function sceneCue(t, i) {
-  const scene = $(`.scene[data-i="${i}"]`);
-  if (t.scene === "corner") {
-    const code = $(".code-bubble code", scene), text = 'print("Hello, World!")';
-    code.textContent = "";
-    scene.classList.remove("typed");
-    later(() => {
-      scene.classList.add("typed");
-      if (reduceMotion) { code.textContent = text; return; }
-      [...text].forEach((ch, k) => later(() => (code.textContent += ch), k * 75));
-    }, reduceMotion ? 0 : 5200);
-  }
-  if (t.scene === "detour") { scene.classList.remove("scratch"); void scene.offsetWidth; scene.classList.add("scratch"); }
+  if (t.scene === "detour") scenes(i).forEach((s) => { s.classList.remove("scratch"); void s.offsetWidth; s.classList.add("scratch"); });
   const count = $(`.track[data-i="${i}"] .count`);
   if (count && !count.dataset.done) {
     count.dataset.done = 1;
@@ -129,15 +142,20 @@ function sceneCue(t, i) {
     requestAnimationFrame(tick);
   }
 }
-// The ending flips "The End" to "To be continued" every time it is reached
-const flip = () => $$(".scene .flip").forEach((f) => { f.classList.remove("flipped"); later(() => f.classList.add("flipped"), 2200); });
+// "The End" flips to "To be continued" each time the crossroads comes on
+const flip = () => $$(".scene .flip").forEach((f) => {
+  f.classList.remove("flipped");
+  f.textContent = "The End";
+  later(() => f.classList.add("swap"), 2200);
+  later(() => { f.textContent = "To be continued"; f.classList.replace("swap", "flipped"); }, 2650);
+});
 
 function update() {
-  const mid = innerHeight * 0.45;
+  const mid = innerHeight * (wide.matches ? 0.45 : 0.7); // on a phone the pinned stage covers the top of the screen
   let i = 0;
   trackEls.forEach((el, j) => { if (el.getBoundingClientRect().top < mid) i = j; });
   if (debrief.getBoundingClientRect().top < innerHeight * 0.7) i = ENDING;
-  if (i !== active) { enter(i); if (i === ENDING || T[i]?.scene === "crossroads") flip(); }
+  if (i !== active) enter(i);
 
   // album progress on the vinyl ring
   const max = document.documentElement.scrollHeight - innerHeight;
@@ -151,7 +169,7 @@ function update() {
     const k = Math.max(0, Math.min(1, (mid - r.top) / (r.height * 0.55)));
     const n = j < active ? pins.length : j > active ? 0 : Math.ceil(k * pins.length);
     pins.forEach((p, m) => p.classList.toggle("in", m < n));
-    $$(`.scene[data-i="${j}"] .note`).forEach((p, m) => p.classList.toggle("in", m < n));
+    scenes(j).forEach((s) => $$(".note", s).forEach((p, m) => p.classList.toggle("in", m < n)));
   });
 }
 addEventListener("scroll", update, { passive: true });
@@ -175,7 +193,7 @@ function schedule() {
   if (active >= ENDING) { setPlaying(false); return; }
   const t = T[active] || T[0];
   const words = `${t.lead} ${t.text}`.split(/\s+/).length;
-  const ms = Math.min(18000, Math.max(9000, words * 280 + (t.actions?.length || 1) * 1500));
+  const ms = Math.min(16000, Math.max(8000, words * 250 + (t.actions?.length || 1) * 1200));
   dwell = setTimeout(() => go(active + 1), ms);
 }
 function go(i) {
@@ -188,14 +206,15 @@ $("#next").addEventListener("click", () => go(active + 1));
 $$("[data-play]").forEach((b) => b.addEventListener("click", () => setPlaying(true)));
 $("#vinyl").addEventListener("click", () => dance("You found the dance"));
 
-// Pins: the world title gets a victory dance, the rest get a point
+// Pins open to show their detail; the world title gets a victory dance, the rest get a point
 $("#tracks").addEventListener("click", (e) => {
   const b = e.target.closest("[data-pin]");
-  if (!b || !fig) return;
+  if (!b) return;
+  b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") !== "true");
   b.parentElement.classList.remove("poked");
   void b.offsetWidth;
   b.parentElement.classList.add("poked");
-  fig.react(/champion/i.test(b.textContent) ? "victory" : "point");
+  if (fig) fig.react(/champion/i.test(b.textContent) ? "victory" : "point");
 });
 
 /* ---------- Music (optional, per track, added through the admin) ---------- */

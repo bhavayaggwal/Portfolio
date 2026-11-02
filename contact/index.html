@@ -4,22 +4,32 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact · Bhavay Aggarwal</title>
-  <meta name="description" content="Get in touch with Bhavay Aggarwal." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231A1816'/><text x='16' y='22' font-family='Georgia,serif' font-size='18' fill='%23F5F1EA' text-anchor='middle'>B</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <meta name="description" content="Write to Bhavay Aggarwal: a short form that lands in his inbox." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230c0a08'/><text x='16' y='23' font-family='sans-serif' font-size='19' fill='%23c9a45a' text-anchor='middle'>B</text></svg>" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500&display=swap" rel="stylesheet" />
 </head>
-<body data-root="../">
-  <main id="main">
-    <section class="section contact page-first">
-      <h1 class="display big">Let's build something<br />that ships.</h1>
-      <div class="contact-row">
-        <button class="btn primary copy" id="copy-email"><span id="email"></span><span class="copy-label mono">Copy</span></button>
-        <span id="contact-links" class="contact-row"></span>
-      </div>
-    </section>
+<body data-root="../" class="is-contact">
+  <main id="main" class="wrap contact-grid">
+    <div class="contact-side">
+      <h1 class="page-title">Write to me</h1>
+      <p class="lede">A role, a project, or a playlist worth hearing. Your message goes <mark>straight to my inbox</mark>, and I reply from <span id="email-inline"></span>.</p>
+      <div class="contact-pic"><img src="../stills/talk.webp" width="1200" height="1500" alt="Bunny sitting in a chair, mid-conversation" loading="lazy" /></div>
+      <nav class="contact-links" aria-label="Other ways to reach me"><a class="link" id="c-email" href="mailto:">Email</a><a class="link" id="c-li" href="#" target="_blank" rel="noopener">LinkedIn</a><a class="link" id="c-gh" href="#" target="_blank" rel="noopener">GitHub</a></nav>
+    </div>
+    <!-- Posts to Web3Forms when content/profile.json has a formKey; otherwise to the visitor's mail app -->
+    <form class="form" id="contact-form" method="POST" action="https://api.web3forms.com/submit">
+      <input type="hidden" name="access_key" id="access-key" />
+      <input type="hidden" name="subject" value="New message from your portfolio" />
+      <input type="hidden" name="from_name" value="Portfolio contact form" />
+      <input type="checkbox" name="botcheck" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required maxlength="120" /></div>
+      <div class="field"><label for="f-email">Your email</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200" /></div>
+      <div class="field"><label for="f-msg">Message</label><textarea id="f-msg" name="message" required maxlength="5000"></textarea></div>
+      <button class="btn primary" type="submit" id="f-send">Send message</button>
+      <p class="form-status" id="f-status" role="status" aria-live="polite"></p>
+    </form>
   </main>
   <script type="module" src="/src/pages/contact.js"></script>
 </body>

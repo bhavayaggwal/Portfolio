@@ -3,28 +3,78 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bhavay Aggarwal</title>
-  <meta name="description" content="Bhavay Aggarwal (Bunny): developer turned AI project manager. Play the story, or browse work, papers and skills." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231A1816'/><text x='16' y='22' font-family='Georgia,serif' font-size='18' fill='%23F5F1EA' text-anchor='middle'>B</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <title>Bhavay Aggarwal · Developer turned AI project manager</title>
+  <meta name="description" content="Bhavay 'Bunny' Aggarwal: developer turned AI project manager. His story as an album, his work, and how to reach him." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23232323'/><text x='16' y='23' font-family='sans-serif' font-size='19' fill='%23ffffff' text-anchor='middle'>B</text></svg>" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500&display=swap" rel="stylesheet" />
 </head>
-<body data-root="./" class="is-landing">
-  <main id="main" class="landing">
-    <div class="landing-copy">
-      <h1 class="display" id="name"></h1>
-      <p class="landing-tagline" id="tagline"></p>
-      <p class="lede" id="landing-line"></p>
-      <a class="btn primary play" id="play" href="story/"><span aria-hidden="true">▶</span> Play my story</a>
-      <nav class="landing-links" id="landing-links" aria-label="More"></nav>
-    </div>
-    <!-- The 3D character (src/figure.js) is drawn over this slot -->
-    <figure class="figure-slot" id="figure-slot" tabindex="0" role="img" aria-label="Interactive 3D figure of Bhavay. Click or press Enter to wave; drag or use arrow keys to turn.">
-      <span class="figure-hint mono">Drag to turn · click to wave</span>
-      <span class="figure-fallback display" aria-hidden="true">BA</span>
-    </figure>
+<body data-root="./" class="is-home">
+  <!-- Bunny, on a fixed layer behind the page: dances behind the hero, then flies into the story box -->
+  <figure class="figure-slot figure-fly" id="figure-slot" tabindex="0" role="img" aria-label="Bunny, Bhavay's 3D character in headphones. Click him or press Enter and he waves back.">
+    <span class="figure-fallback"><img src="stills/dance.webp" width="1200" height="1500" alt="" /></span>
+  </figure>
+
+  <main id="main">
+    <!-- Welcome -->
+    <section class="hero wrap pass" aria-labelledby="name">
+      <div class="fig-hero" id="fig-hero" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <h1 class="hero-name" id="name"></h1>
+        <div class="hero-row">
+          <p id="landing-line"></p>
+          <a class="btn primary" href="story/">Play my story</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Story: Bunny lands in his box and waves -->
+    <section class="home-section" aria-labelledby="story-h"><div class="wrap story-call pass">
+      <div class="story-copy reveal">
+        <h2 id="story-h"></h2>
+        <p class="lede" id="story-sub"></p>
+        <a class="btn primary big" href="story/">Play my story</a>
+      </div>
+      <div class="fig-box" id="fig-box"><span class="figure-hint" id="stage-hint">Click Bunny to say hi</span></div>
+    </div></section>
+
+    <!-- Skills: the cluster, with its groups beside it -->
+    <section class="home-section" aria-labelledby="skills-h"><div class="wrap skills">
+      <div class="sphere-wrap"><div class="sphere" id="sphere" aria-hidden="true"></div></div>
+      <div class="reveal">
+        <h2 id="skills-h">What I work with</h2>
+        <p class="lede skills-lede">Delivery, <mark>people</mark>, and the code underneath. Pick a group to light it up; drag the cluster to spin it.</p>
+        <ul class="groups" id="groups" aria-label="Skill groups"></ul>
+        <ul class="sr-only" id="skill-list"></ul>
+      </div>
+    </div></section>
+
+    <!-- Work: a carousel of projects -->
+    <section class="home-section" aria-labelledby="work-h">
+      <div class="wrap carousel-head">
+        <h2 id="work-h" class="reveal">Selected work</h2>
+        <div class="carousel-btns">
+          <button class="btn round" id="slide-prev" aria-label="Previous project" aria-controls="slides"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+          <button class="btn round" id="slide-next" aria-label="Next project" aria-controls="slides"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+        </div>
+      </div>
+      <ul class="slides" id="slides" aria-label="Projects" tabindex="0"></ul>
+      <div class="wrap"><a class="btn more-link" href="work/">All work, history and papers</a></div>
+    </section>
+
+    <!-- Contact: the email as the headline -->
+    <section class="home-section" aria-labelledby="contact-h"><div class="wrap email-room">
+      <div>
+        <h2 id="contact-h" class="sr-only">Contact</h2>
+        <p class="lede">Hiring, building something, or want to swap <mark>playlists</mark>? Write to me.</p>
+      </div>
+      <a class="email-big" id="email-big" href="mailto:"></a>
+      <div class="corners">
+        <span class="soft" id="where"></span>
+        <nav aria-label="Contact links"><a class="link" href="contact/">Use the contact form</a><a class="link" id="gh" href="#" target="_blank" rel="noopener">GitHub</a><a class="link" id="li" href="#" target="_blank" rel="noopener">LinkedIn</a></nav>
+      </div>
+    </div></section>
   </main>
   <script type="module" src="/src/pages/home.js"></script>
 </body>

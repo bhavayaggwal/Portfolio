@@ -1,9 +1,7 @@
 /*
  * The 3D character (Three.js).
  * - Loads the GLB set in content/profile.json → character.model.
- * - Landing: sits in the hero slot (#figure-slot); on scroll it glides into the background and fades to
- *   character.backgroundOpacity.
- * - Docked (the story stage): fills the slot and stays put; the story directs it through the returned API
+ * - Fills its slot (#figure-slot) and stays put; the page directs it through the returned API
  *   (play clips, walk, sit at a chair and desk).
  * - Follows the cursor, glances around when left alone, turns on drag, and waves back when clicked
  *   (a seated wave when sitting).
@@ -18,17 +16,15 @@ import { root as siteRoot } from "./content.js";
 // Bones below the waist, used to splice an upper-body motion (the wave) onto a seated pose.
 const LOWER_BODY = /(Hips|UpLeg|Leg|Foot|Toe)/;
 
-export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPoke } = {}) {
-  const slot = document.getElementById("figure-slot");
+export function initFigure(cfg, { turn = 0, onPoke, slot = document.getElementById("figure-slot") } = {}) {
   if (!slot || !cfg.model) return;
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- Stage: a fixed layer behind the page, or inside the slot when docked ---------- */
+  /* ---------- Stage: the canvas layer inside the slot ---------- */
   const stage = document.createElement("div");
-  stage.className = "figure-stage" + (docked ? " docked" : "");
+  stage.className = "figure-stage";
   stage.setAttribute("aria-hidden", "true");
-  if (docked) slot.prepend(stage);
-  else document.body.prepend(stage);
+  slot.prepend(stage);
 
   let renderer;
   try {
@@ -62,7 +58,7 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
   const actor = new THREE.Group(); // hop and look happen here
   mover.add(actor);
 
-  // soft floor shadow
+  // soft dark pool on the floor under the figure
   const cv = document.createElement("canvas");
   cv.width = cv.height = 256;
   const g = cv.getContext("2d");
@@ -71,11 +67,11 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
   gr.addColorStop(1, "rgba(0,0,0,0)");
   g.fillStyle = gr;
   g.fillRect(0, 0, 256, 256);
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.0),
+  const floorGlow = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.0),
     new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthWrite: false }));
-  shadow.rotation.x = -Math.PI / 2;
-  shadow.position.set(0, 0.005, 0.05);
-  mover.add(shadow);
+  floorGlow.rotation.x = -Math.PI / 2;
+  floorGlow.position.set(0, 0.005, 0.05);
+  mover.add(floorGlow);
 
   // Invisible body-sized target, so a click on the figure (not the space around it) gets a wave
   const hitBox = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 3.5, 12), new THREE.MeshBasicMaterial({ visible: false }));
@@ -83,7 +79,7 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
   actor.add(hitBox);
 
   /* ---------- Props: a simple chair and desk, placed from the measured seated pose ---------- */
-  const propMat = new THREE.MeshStandardMaterial({ color: 0x2b3142, roughness: 0.8 });
+  const propMat = new THREE.MeshStandardMaterial({ color: 0x454545, roughness: 0.8 }); // the palette's grey
   const screenMat = new THREE.MeshStandardMaterial({ color: 0x111111, emissive: 0x8fcaff, emissiveIntensity: 0.9 });
   const box = (w, h, d, x, y, z, mat = propMat) => {
     const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
@@ -125,14 +121,14 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
 
   // Crossfade to a clip. `once` plays it a single time, then returns to the resting loop; the promise
   // resolves when it ends or another clip takes over.
-  function play(name, { once = false, fade = 0.35 } = {}) {
+  function play(name, { once = false, fade = 0.35, speed = 1 } = {}) {
     const next = clips[name];
     if (!next) return Promise.resolve();
     if (!once) rest = name;
     if (next === current && !once && !currentOnce) return Promise.resolve();
     if (current && current !== next) settle(current);
     if (next === current) settle(next);
-    next.reset().setLoop(once ? THREE.LoopOnce : THREE.LoopRepeat, Infinity);
+    next.reset().setEffectiveTimeScale(speed).setLoop(once ? THREE.LoopOnce : THREE.LoopRepeat, Infinity);
     next.clampWhenFinished = once;
     if (current && current !== next) { next.fadeIn(fade).play(); current.fadeOut(fade); }
     else next.setEffectiveWeight(1).play(); // first clip applies at full weight, so the pose can be measured
@@ -174,9 +170,8 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
     const s = 3.5 / size.y;
     m.scale.multiplyScalar(s);
     m.position.set(-center.x * s, -bb.min.y * s, -center.z * s);
-    if (mixer && docked) measureProps(m);
+    if (mixer) measureProps(m);
     slot.classList.add("ready");
-    if (greet && clips.wave && !reduceMotion) setTimeout(() => play("wave", { once: true }), 700);
     readyResolve();
   }, undefined, (err) => {
     console.warn("[figure] could not load", cfg.model, err);
@@ -219,54 +214,17 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
   const place = (x, z = 0) => { move = null; mover.position.set(x, 0, z); };
 
   /* ---------- Layout ---------- */
-  let W = 0, H = 0;
-  function targetRect() {
-    const vw = innerWidth, vh = innerHeight;
-    if (vw < 820) {
-      const w = Math.min(vw * 0.92, vh * 0.62);
-      return { x: (vw - w) / 2, y: vh - w * 1.25, w };
-    }
-    const h = vh * 0.94, w = h * 0.8;
-    return { x: Math.min(vw - w - vw * 0.02, vw * 0.5 + (vw * 0.5 - w) / 2), y: vh - h, w };
-  }
   function resize() {
-    if (docked) {
-      W = Math.max(1, Math.round(slot.clientWidth));
-      H = Math.max(1, Math.round(slot.clientHeight));
-    } else {
-      const t = targetRect();
-      W = Math.round(Math.max(t.w, slot.clientWidth));
-      H = Math.round(W * 1.25);
-      stage.style.width = W + "px";
-      stage.style.height = H + "px";
-    }
+    const W = Math.max(1, Math.round(slot.clientWidth)), H = Math.max(1, Math.round(slot.clientHeight));
     renderer.setSize(W, H, false);
     camera.aspect = W / H;
     // keep the whole figure in frame on a wide, short stage
     camera.fov = camera.aspect > 1 ? 30 * Math.min(1.25, 0.85 + camera.aspect * 0.15) : 30;
     camera.updateProjectionMatrix();
-    place2d();
   }
-  const ease = (t) => t * t * (3 - 2 * t);
   const clamp01 = (v) => Math.max(0, Math.min(1, v));
-  let progress = 0;
-  const header = document.querySelector(".topbar");
-  function place2d() {
-    if (docked) return;
-    const s = slot.getBoundingClientRect(), t = targetRect();
-    progress = ease(clamp01(scrollY / (innerHeight * 0.75)));
-    const fade = ease(clamp01(scrollY / (innerHeight * 1.3))); // opacity eases more slowly than position
-    const top = Math.max(s.top, header ? header.offsetHeight + 8 : 0); // never ride up under the header
-    const x = s.left + (t.x - s.left) * progress;
-    const y = top + (t.y - top) * progress;
-    const w = s.width + (t.w - s.width) * progress;
-    slot.style.setProperty("--detach", progress.toFixed(3));
-    stage.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${w / W})`;
-    stage.style.opacity = (1 - (1 - cfg.backgroundOpacity) * fade).toFixed(3);
-  }
   addEventListener("resize", resize);
-  if (docked && "ResizeObserver" in window) new ResizeObserver(resize).observe(slot);
-  if (!docked) addEventListener("scroll", place2d, { passive: true });
+  if ("ResizeObserver" in window) new ResizeObserver(resize).observe(slot);
 
   /* ---------- Interaction ---------- */
   const pointer = { x: 0, y: 0 };
@@ -278,10 +236,9 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
     lastMove = performance.now();
   }, { passive: true });
 
-  // Docked, only a click on the figure itself counts; on the landing the whole slot is the figure.
+  // Only a click on the figure itself counts, not the empty stage around it.
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   function onFigure(e) {
-    if (!docked) return true;
     const r = renderer.domElement.getBoundingClientRect();
     ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
@@ -296,7 +253,7 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
     slot.classList.add("dragging");
   });
   slot.addEventListener("pointermove", (e) => {
-    if (!dragging) { if (docked) slot.classList.toggle("over-figure", onFigure(e)); return; }
+    if (!dragging) { slot.classList.toggle("over-figure", onFigure(e)); return; }
     const dx = e.clientX - dragX;
     dragX = e.clientX;
     moved += Math.abs(dx);
@@ -341,7 +298,7 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
   const look = { x: 0, y: 0 };
   let lookWeight = 1;
   const clock = new THREE.Clock();
-  renderer.setAnimationLoop((now) => {
+  function frame(now) {
     const dt = Math.min(clock.getDelta(), 0.05), t = now / 1000;
     if (mixer) mixer.update(dt);
 
@@ -363,8 +320,7 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
     heading += (headingGoal - heading) * (reduceMotion ? 1 : 0.12);
 
     // drag spin with inertia, easing back to the resting turn (toward the content)
-    const restTurn = docked ? turn : progress * -0.35;
-    if (!dragging) { spin += spinV; spinV *= 0.92; spin += (restTurn - spin) * 0.035; }
+    if (!dragging) { spin += spinV; spinV *= 0.92; spin += (turn - spin) * 0.035; }
     mover.rotation.y = heading + spin;
 
     // face the cursor; after a few idle seconds, glance around on its own (not while walking)
@@ -374,9 +330,8 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
       glance = { x: (Math.random() - 0.5) * 1.2, y: (Math.random() - 0.6) * 0.5 };
       nextGlance = now + 1800 + Math.random() * 2500;
     }
-    const k = progress > 0.5 ? 0.5 : 1;
-    look.x += ((idle ? glance.x : pointer.x * k) - look.x) * 0.06;
-    look.y += ((idle ? glance.y : pointer.y * k) - look.y) * 0.06;
+    look.x += ((idle ? glance.x : pointer.x) - look.x) * 0.06;
+    look.y += ((idle ? glance.y : pointer.y) - look.y) * 0.06;
     actor.rotation.y = look.x * 0.35 * lookWeight; // no head bone yet, so the whole figure turns gently
     actor.rotation.x = look.y * 0.04 * lookWeight;
 
@@ -398,10 +353,20 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
     }
     actor.position.y = y;
     actor.scale.set(1, sy, 1);
-    shadow.scale.setScalar(1 - y * 0.6);
+    floorGlow.scale.setScalar(1 - y * 0.6);
 
     renderer.render(scene, camera);
-  });
+  }
+  // Draw only while the figure is on screen and the tab is visible; the clock skips the paused time.
+  let onScreen = true;
+  const run = () => {
+    const live = onScreen && !document.hidden;
+    if (live) clock.getDelta();
+    renderer.setAnimationLoop(live ? frame : null);
+  };
+  new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; run(); }).observe(slot);
+  document.addEventListener("visibilitychange", run);
+  run();
 
   resize();
   return {
@@ -410,5 +375,12 @@ export function initFigure(cfg, { greet = false, docked = false, turn = 0, onPok
     set posture(p) { posture = p; hitBox.scale.y = p === "seated" ? 0.75 : 1; hitBox.position.y = p === "seated" ? 1.35 : 1.75; },
     get moving() { return !!move; },
     get position() { return mover.position; },
+    set turn(t) { turn = t; },
+    // Render one frame and return it as an image (used by tools/stills to make the site's stills)
+    snapshot(type = "image/webp") {
+      mixer?.update(0); // apply the current pose even if the animation loop is throttled
+      for (const n in props) { props[n].visible = propWant[n] > 0; props[n].scale.set(1, propWant[n] || 0.001, 1); }
+      renderer.render(scene, camera); return renderer.domElement.toDataURL(type, 0.9);
+    },
   };
 }

@@ -2,19 +2,12 @@
 node_modules/
 dist/
 
-# Things set aside during clean-up (kept locally, not in the repo)
-dump/
-
-# Model pipeline: heavy originals and regenerable intermediates.
+# Model originals and build intermediates (local only).
 # The site's model is public/models/bhavay.glb (committed).
-models/source/
-models/build/
+models/
 
-# Copied from three.js on npm install
-public/draco/
-
-# Design skill (third-party, local tooling; reinstall with npx skills, see skills-lock.json)
-.taste-skill/
 .claude/skills/
-.agents/
-.hallmark/
+
+# Local secrets (e.g. the admin sign-in token); never commit
+token.txt
+*.token

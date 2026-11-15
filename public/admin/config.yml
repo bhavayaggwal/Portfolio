@@ -20,94 +20,16 @@ collections:
     editor:
       preview: false
     files:
-      - name: story
-        label: "Story (The Adventures of Bunny)"
-        file: content/story.json
-        fields:
-          - { name: album, label: Album title, widget: string }
-          - { name: subtitle, label: Subtitle, widget: string }
-          - name: tracks
-            label: Tracks (in story order)
-            widget: list
-            summary: "{{fields.title}}"
-            fields:
-              - { name: id, label: Link name, widget: string, hint: "Lowercase with dashes, used in the page address, e.g. plot-twist" }
-              - { name: title, label: Track title, widget: string }
-              - { name: lead, label: Opening line, widget: string, hint: "Shown large. Keep it under about 60 characters. Wrap key words in *asterisks* to highlight them in red." }
-              - { name: text, label: On-screen text, widget: text, hint: "Two or three sentences, about 40 words. Wrap key words in *asterisks* to highlight them in red." }
-              - { name: notes, label: Liner notes (full text), widget: text, required: false, hint: "Shown when a visitor opens the liner notes." }
-              - { name: stat, label: Sticker line, widget: string, required: false, hint: "e.g. New skill unlocked: empathy" }
-              - name: pins
-                label: Pins (for a brag board)
-                widget: list
-                required: false
-                summary: "{{fields.title}}"
-                fields:
-                  - { name: title, label: Title, widget: string }
-                  - { name: text, label: Detail, widget: string }
-              - name: actions
-                label: Character actions (played in order; the last one repeats)
-                hint: "Sitting and standing up are added automatically when needed. End with something that loops well (Idle, Nod, Sit, Type, Sit and talk)."
-                widget: list
-                field:
-                  name: clip
-                  label: Action
-                  widget: select
-                  options:
-                    - { label: "Idle", value: idle }
-                    - { label: "Wave", value: wave }
-                    - { label: "Walk on stage (off right, in from left)", value: walkIn }
-                    - { label: "Catwalk in from the back", value: catwalk }
-                    - { label: "Nod to the beat", value: nod }
-                    - { label: "Sarcastic nod", value: smirkNod }
-                    - { label: "Point", value: point }
-                    - { label: "Kneel and point", value: kneelPoint }
-                    - { label: "Surprised", value: surprised }
-                    - { label: "Look around", value: lookAround }
-                    - { label: "Think", value: think }
-                    - { label: "Talk", value: talk }
-                    - { label: "Shrug", value: shrug }
-                    - { label: "Victory", value: victory }
-                    - { label: "Dance", value: dance }
-                    - { label: "Bow", value: bow }
-                    - { label: "Sit down", value: sitDown }
-                    - { label: "Sit (idle)", value: sitIdle }
-                    - { label: "Sit and talk", value: sitTalk }
-                    - { label: "Sit and clap", value: sitClap }
-                    - { label: "Type at a desk", value: type }
-                    - { label: "Stand up", value: standUp }
-              - name: scene
-                label: Set piece
-                widget: select
-                options: [play, corner, board, detour, portal, runway, crossroads]
-              - { name: mood, label: Music mood, widget: string, required: false, hint: "Describes the soundtrack for this track." }
-              - { name: music, label: Music file, widget: file, required: false, hint: "A short loop (MP3 or OGG) you have the rights to use." }
-          - name: whyMusic
-            label: Why music? (lines shown on the vinyl)
-            widget: list
-            field: { name: line, label: Line, widget: string }
-          - name: ending
-            label: Ending
-            widget: object
-            fields:
-              - { name: title, label: Title, widget: string }
-              - { name: text, label: Text, widget: string }
-
       - name: profile
-        label: Profile, contact & character
+        label: Profile, contact & avatar
         file: content/profile.json
         fields:
           - { name: name, label: Name, widget: string }
           - { name: role, label: Current role, widget: string }
-          - { name: landingLine, label: Landing page line, widget: text, hint: "One sentence under your name on the landing page. Wrap key words in *asterisks* to highlight them in red." }
-          - name: tagline
-            label: Headline words
-            hint: Shown under your name on the landing page, e.g. Innovator · Developer · Audiophile.
-            widget: list
-            field: { name: word, label: Word, widget: string }
+          - { name: landingLine, label: Headline, widget: text, hint: "One or two short sentences under your name. Wrap key words in *asterisks* to make them bold." }
           - { name: intro, label: Intro sentence, widget: text, hint: "One or two sentences under the headline." }
           - { name: summary, label: Summary paragraph, widget: text }
-          - { name: status, label: Status line, widget: string, required: false, hint: "e.g. Pursuing PMP certification" }
+          - { name: status, label: Status line, widget: string, required: false, hint: "Shown with a green dot at the top, e.g. Open to AI programme roles" }
           - { name: photo, label: Profile photo, widget: image, required: false }
           - { name: email, label: Email, widget: string }
           - { name: formKey, label: Contact form key (Web3Forms), widget: string, required: false, hint: "From web3forms.com. Empty: the contact form opens the visitor's mail app instead." }
@@ -124,14 +46,13 @@ collections:
           - { name: timezone, label: Time zone, widget: string, hint: "IANA name, e.g. Asia/Kolkata" }
           - { name: timezoneLabel, label: Time zone label, widget: string, hint: "e.g. IST" }
           - name: character
-            label: 3D character
+            label: 3D avatar
             widget: object
             fields:
-              - { name: model, label: Model file (.glb), widget: file, hint: "Use the optimized model from tools/optimize-model.mjs." }
-              - { name: backgroundOpacity, label: Visibility in the background, widget: number, value_type: float, min: 0, max: 1, step: 0.05 }
+              - { name: model, label: Model file (.glb), widget: file, hint: "A rigged GLB with idle and wave clips (Draco compression is fine)." }
 
       - name: highlights
-        label: Key numbers
+        label: Key outcomes
         file: content/highlights.json
         fields:
           - name: metrics
@@ -161,12 +82,14 @@ collections:
               - { name: start, label: Start, widget: string, hint: "e.g. Aug 2026" }
               - { name: end, label: End, widget: string, hint: "e.g. Present" }
               - name: tags
-                label: Tags
+                label: Focus areas
+                hint: "Shown as chips on the role's card, e.g. AI data, CI/CD, Client delivery."
                 widget: list
                 required: false
                 field: { name: tag, label: Tag, widget: string }
               - name: points
                 label: Highlights
+                hint: "Not shown on the page; recruiters' AI agents read them in llms.txt."
                 widget: list
                 field: { name: point, label: Highlight, widget: text }
 
@@ -245,3 +168,19 @@ collections:
               - { name: title, label: Title, widget: string }
               - { name: detail, label: Detail, widget: string }
               - { name: year, label: Year, widget: string, required: false }
+
+      - name: testimonials
+        label: Testimonials
+        file: content/testimonials.json
+        fields:
+          - name: items
+            label: Recommendations
+            hint: "The 'What people say' section appears once there is at least one."
+            widget: list
+            required: false
+            summary: "{{fields.name}}, {{fields.title}}"
+            fields:
+              - { name: quote, label: Quote, widget: text }
+              - { name: name, label: Name, widget: string }
+              - { name: title, label: Role and company, widget: string, hint: "e.g. Delivery Lead, Keywords Studios" }
+              - { name: link, label: Link (optional), widget: string, required: false, hint: "e.g. the LinkedIn recommendation" }

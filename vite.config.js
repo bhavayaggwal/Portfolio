@@ -1,29 +1,26 @@
 import { defineConfig } from "vite";
-import { writeFileSync, mkdirSync } from "node:fs";
-import { dirname, resolve, relative } from "node:path";
+import { readFileSync } from "node:fs";
+import { load, renderBody, renderHead, renderLlms } from "./src/render.js";
 
-// Dev-only endpoint used by the tool pages in /tools (e.g. the animation merger) to save
-// generated files. Writes are limited to models/build/ and public/stills/ so a tool can't touch anything else.
-function toolSave() {
-  const allowed = [resolve("models/build"), resolve("public/stills")];
+// The live address; used for canonical, social-preview and llms.txt links.
+const SITE_URL = "https://bhavayaggwal.github.io/Portfolio/";
+const content = () => load((name) => JSON.parse(readFileSync(`content/${name}.json`, "utf8")));
+
+// Renders content/*.json into index.html (dev and build), and writes llms.txt next to it.
+function report() {
   return {
-    name: "tool-save",
-    apply: "serve",
+    name: "report",
+    transformIndexHtml(html) {
+      const d = content();
+      return html.replace("<!--head-->", renderHead(d, SITE_URL)).replace("<!--body-->", renderBody(d));
+    },
     configureServer(server) {
-      server.middlewares.use("/__tools/save", (req, res) => {
-        const target = resolve(new URL(req.url, "http://x").searchParams.get("path") || "");
-        if (req.method !== "POST" || !allowed.some((dir) => !relative(dir, target).startsWith(".."))) {
-          res.statusCode = 403;
-          return res.end("Only POSTs into models/build/ or public/stills/ are allowed.");
-        }
-        const chunks = [];
-        req.on("data", (c) => chunks.push(c));
-        req.on("end", () => {
-          mkdirSync(dirname(target), { recursive: true });
-          writeFileSync(target, Buffer.concat(chunks));
-          res.end(JSON.stringify({ saved: relative(process.cwd(), target), bytes: Buffer.concat(chunks).length }));
-        });
-      });
+      server.watcher.add("content");
+      server.watcher.on("change", (f) => /content[\\/].+\.json$/.test(f) && server.ws.send({ type: "full-reload" }));
+      server.middlewares.use("/llms.txt", (_req, res) => { res.setHeader("Content-Type", "text/markdown; charset=utf-8"); res.end(renderLlms(content(), SITE_URL)); });
+    },
+    generateBundle() {
+      this.emitFile({ type: "asset", fileName: "llms.txt", source: renderLlms(content(), SITE_URL) });
     },
   };
 }
@@ -32,16 +29,5 @@ export default defineConfig({
   // Relative base so the built site works at any path (e.g. username.github.io/Portfolio/).
   base: "./",
   server: { port: 8080, open: false },
-  plugins: [toolSave()],
-  build: {
-    rollupOptions: {
-      // One HTML entry per page
-      input: {
-        home: resolve("index.html"),
-        story: resolve("story/index.html"),
-        work: resolve("work/index.html"),
-        contact: resolve("contact/index.html"),
-      },
-    },
-  },
+  plugins: [report()],
 });

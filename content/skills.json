@@ -3,29 +3,22 @@
     {
       "name": "Delivery",
       "items": [
-        "Project Management",
         "Program Management",
         "Agile",
         "Waterfall",
-        "Scrum",
         "Sprint Planning",
         "Retrospectives",
-        "Risk & Issue Escalation",
-        "Change Management",
-        "Resource Allocation",
-        "Milestone Tracking",
-        "Budget Oversight"
+        "Milestone Tracking"
       ]
     },
     {
       "name": "Leadership",
       "items": [
         "Cross-Functional Coordination",
-        "Client Management",
+        "Client Coordination",
         "Onboarding & Training",
         "Performance Management",
-        "Coaching",
-        "Hiring Coordination"
+        "Coaching"
       ]
     },
     {
@@ -37,10 +30,7 @@
         "CI/CD Pipelines",
         "AI-Augmented Reporting",
         "KPI Analysis",
-        "TensorFlow",
-        "OpenCV",
-        "Flask",
-        "PyQt6"
+        "TensorFlow"
       ]
     },
     {
@@ -48,7 +38,6 @@
       "items": [
         "Jira",
         "Asana",
-        "Power BI",
         "GitHub",
         "Claude"
       ]

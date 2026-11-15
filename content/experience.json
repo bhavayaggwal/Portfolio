@@ -2,15 +2,16 @@
   "roles": [
     {
       "company": "Flixstock",
-      "role": "AI Project Manager",
+      "role": "AI Project Lead",
       "start": "Aug 2026",
-      "end": "Present",
+      "end": "Oct 2026",
       "tags": [
+        "AI production",
         "Client delivery",
         "Program management"
       ],
       "points": [
-        "Lead program delivery for a 95+ person team, with end-to-end production planning and delivery for a $6.4B valuation client.",
+        "Delivered 800–1,000 SKUs a week of AI-generated fashion imagery at an 82% on-time rate for a European e-commerce client",
         "Coordinate client expectations, delivery timelines and project onboarding across studio coordination and back-office alignment.",
         "Client-facing lead: manage relationships and expectations while coordinating a cross-functional team."
       ]
@@ -21,10 +22,11 @@
       "start": "Jan 2026",
       "end": "Aug 2026",
       "tags": [
-        "Amazon",
-        "Agile + Waterfall",
+        "AI data (Amazon Nova)",
         "Python QA",
-        "Hiring"
+        "CI/CD",
+        "Agile + Waterfall",
+        "Leadership"
       ],
       "points": [
         "Senior AI Researcher leading a 30+ person cross-functional program; onboarded Mecka AI to build the data layer for physical AI agents.",
@@ -41,9 +43,9 @@
       "start": "Apr 2025",
       "end": "Dec 2025",
       "tags": [
-        "Operations",
-        "Data quality",
-        "Training"
+        "AI data quality",
+        "Anomaly detection",
+        "Onboarding & training"
       ],
       "points": [
         "Operations Coordinator for the Nova Agentic AI data track; improved baseline data quality by 43% through audits, anomaly detection and behavioural pattern analysis.",
@@ -56,8 +58,9 @@
       "start": "Sep 2024",
       "end": "Mar 2025",
       "tags": [
-        "Retention",
-        "Escalations"
+        "Customer retention",
+        "Escalations",
+        "Behaviour analysis"
       ],
       "points": [
         "Cut subscription cancellations by 38% and lifted customer satisfaction by 63% by analysing user behaviour, coordinating with backend engineering and defining clear escalation criteria."

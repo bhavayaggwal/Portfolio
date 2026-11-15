@@ -1,21 +1,16 @@
 {
   "name": "Bhavay Aggarwal",
-  "role": "AI Project Manager",
-  "landingLine": "Developer turned *AI project manager*. My friends call me *Bunny*.",
-  "tagline": [
-    "Innovator",
-    "Developer",
-    "Audiophile."
-  ],
+  "role": "Freelance AI Developer",
+  "landingLine": "AI & Data Science Professional building scalable solutions",
   "intro": "I run hybrid Agile and Waterfall delivery for cross-functional teams, and I use Python, SQL and AI to turn KPI data into delivery decisions rather than just reporting on them.",
   "summary": "Project Lead with a track record of running hybrid Agile and Waterfall delivery for cross-functional teams under direct client management. I lead program delivery for a 95+ person team at Flixstock, owning end-to-end production planning and delivery for a $6.4 billion valuation client. I combine project management and budget oversight with technical fluency in Python, SQL and AI-augmented reporting.",
-  "status": "On a Coffee Break",
+  "status": "Swimming in the AI ocean",
   "photo": "",
   "email": "agg.bhavay@gmail.com",
   "formKey": "aefb2140-5c46-47f5-8403-7fd6dd83a9e0",
   "phone": "",
   "showPhone": false,
-  "resumeFile": "",
+  "resumeFile": "/uploads/Bhavay_Aggarwal_Data_Science_Resume.docx",
   "links": {
     "github": "https://github.com/bhavayaggwal",
     "linkedin": "https://www.linkedin.com/in/bhavay-aggarwal2003/"
@@ -24,11 +19,6 @@
   "timezone": "Asia/Kolkata",
   "timezoneLabel": "IST",
   "character": {
-    "model": "models/bhavay.glb",
-    "backgroundOpacity": 0.4,
-    "clips": {
-      "lookAround": "think",
-      "victory": "dance"
-    }
+    "model": "models/bhavay.glb"
   }
 }

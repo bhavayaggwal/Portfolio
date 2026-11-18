@@ -56,7 +56,6 @@
   "Designed and delivered on schedule.": "صُمّم وسُلّم في موعده.",
   "Elsewhere": "روابط أخرى",
   "CV": "السيرة الذاتية",
-  "Admin": "الإدارة",
   "Back to top": "العودة إلى الأعلى",
   "Snake, the old-fashioned way. Arrow keys, WASD or swipe.": "لعبة الثعبان على الطريقة القديمة. استخدم مفاتيح الأسهم أو WASD أو السحب.",
   "Back to work": "العودة إلى العمل",
@@ -71,7 +70,6 @@
   "Press an arrow key or swipe to start": "اضغط أحد مفاتيح الأسهم أو اسحب للبدء",
   "Score {n}": "النقاط: {n}",
   "Game over. Score {n}": "انتهت اللعبة. النقاط: {n}",
-
   "Freelance AI Developer": "مطوّر ذكاء اصطناعي مستقل",
   "AI & Data Science Professional building scalable solutions": "متخصص في الذكاء الاصطناعي وعلوم البيانات يبني حلولًا قابلة للتوسع",
   "I run hybrid Agile and Waterfall delivery for cross-functional teams, and I use Python, SQL and AI to turn KPI data into delivery decisions rather than just reporting on them.": "أدير التسليم بأسلوب هجين يجمع بين Agile وWaterfall لفرق متعددة التخصصات، وأستخدم Python وSQL والذكاء الاصطناعي لتحويل بيانات مؤشرات الأداء إلى قرارات تسليم، لا مجرد تقارير.",
@@ -143,5 +141,6 @@
   "University Research Club": "نادي البحث الجامعي",
   "Founder & Treasurer": "مؤسس وأمين الصندوق",
   "In progress": "قيد الإنجاز",
-  "PMP certification": "شهادة PMP"
+  "PMP certification": "شهادة PMP",
+  "Please wait a minute before sending another message.": "يُرجى الانتظار دقيقة قبل إرسال رسالة أخرى."
 }

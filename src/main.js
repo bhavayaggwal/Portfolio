@@ -62,11 +62,15 @@ if (form && form.action.includes("web3forms")) {
   const status = $(".form-status", form), send = $("button", form);
   const say = (msg, kind = "") => { status.textContent = msg; status.className = `form-status ${kind}`; };
   const email = $("a.email")?.textContent;
+  const COOLDOWN = 60e3; // shortcut: one send a minute per browser only; Web3Forms enforces the real limit per access key
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    // Trim first, so a name or message of only spaces fails the required check
+    const data = Object.fromEntries([...new FormData(form)].map(([k, v]) => [k, String(v).trim()]));
+    for (const k of ["name", "email", "message"]) form.elements[k].value = data[k];
     if (!form.reportValidity()) return;
-    const data = Object.fromEntries(new FormData(form));
     if (data.botcheck) return; // a bot ticked the hidden box
+    if (Date.now() - (+store.get("sent") || 0) < COOLDOWN) return say(t("Please wait a minute before sending another message."), "err");
     send.disabled = true;
     say(t("Sending…"));
     try {
@@ -74,6 +78,7 @@ if (form && form.action.includes("web3forms")) {
       const out = await res.json().catch(() => ({}));
       if (!res.ok || !out.success) throw new Error(out.message || res.status);
       form.reset();
+      store.set("sent", Date.now());
       say(t("Sent. Thank you, I'll reply by email."), "ok");
     } catch {
       say(t("That didn't go through. Try again, or write to {email} directly.", { email }), "err");

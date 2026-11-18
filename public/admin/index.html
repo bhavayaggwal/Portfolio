@@ -10,6 +10,9 @@
   <!-- Sveltia CMS reads ./config.yml and edits the files in /content and /public/uploads.
        Locally (npm run dev, Chrome or Edge) choose "Work with Local Repository" and pick this project folder.
        Once the site is on GitHub, sign in with GitHub to save changes as commits. -->
-  <script src="https://unpkg.com/@sveltia/cms@0.237.0/dist/sveltia-cms.js"></script>
+  <!-- Pinned version + integrity hash (checked against unpkg and jsDelivr): a tampered CDN file is refused, never run with your GitHub token.
+       To upgrade: change the version, then recompute: curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A -->
+  <script src="https://unpkg.com/@sveltia/cms@0.258.1/dist/sveltia-cms.js"
+    integrity="sha384-de/3M+uPwFt49OFqCPX3PaI93kBil3RI4m0yXHFuvBIBQcAWDnH3FDZu6P8y7vEL" crossorigin="anonymous"></script>
 </body>
 </html>

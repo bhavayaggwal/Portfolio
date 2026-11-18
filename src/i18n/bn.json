@@ -56,7 +56,6 @@
   "Designed and delivered on schedule.": "সময়মতো ডিজাইন, সময়মতো ডেলিভারি।",
   "Elsewhere": "অন্যান্য লিংক",
   "CV": "CV",
-  "Admin": "অ্যাডমিন",
   "Back to top": "উপরে ফিরে যান",
   "Snake, the old-fashioned way. Arrow keys, WASD or swipe.": "পুরোনো দিনের স্নেক। অ্যারো কি, WASD বা সোয়াইপ দিয়ে খেলুন।",
   "Back to work": "কাজে ফিরুন",
@@ -71,7 +70,6 @@
   "Press an arrow key or swipe to start": "শুরু করতে অ্যারো কি চাপুন বা সোয়াইপ করুন",
   "Score {n}": "স্কোর {n}",
   "Game over. Score {n}": "খেলা শেষ। স্কোর {n}",
-
   "Freelance AI Developer": "ফ্রিল্যান্স AI ডেভেলপার",
   "AI & Data Science Professional building scalable solutions": "স্কেলযোগ্য সমাধান তৈরি করা AI ও ডেটা সায়েন্স পেশাদার",
   "I run hybrid Agile and Waterfall delivery for cross-functional teams, and I use Python, SQL and AI to turn KPI data into delivery decisions rather than just reporting on them.": "আমি ক্রস-ফাংশনাল টিমের জন্য Agile ও Waterfall মিলিয়ে ডেলিভারি চালাই, আর Python, SQL ও AI দিয়ে KPI ডেটাকে শুধু রিপোর্টে না রেখে ডেলিভারির সিদ্ধান্তে রূপ দিই।",
@@ -143,5 +141,6 @@
   "University Research Club": "বিশ্ববিদ্যালয় গবেষণা ক্লাব",
   "Founder & Treasurer": "প্রতিষ্ঠাতা ও কোষাধ্যক্ষ",
   "In progress": "চলমান",
-  "PMP certification": "PMP সার্টিফিকেশন"
+  "PMP certification": "PMP সার্টিফিকেশন",
+  "Please wait a minute before sending another message.": "আরেকটি বার্তা পাঠানোর আগে এক মিনিট অপেক্ষা করুন।"
 }

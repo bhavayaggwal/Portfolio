@@ -2,21 +2,33 @@
    AI agents get the full report without running JavaScript. Also writes llms.txt and the JSON-LD profile.
    Pure functions: no DOM, runs in Node. */
 
-const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 // Copy from the admin can mark key words as *like this*.
-const hl = (s) => esc(s).replace(/\*([^*\n]+)\*/g, "<strong>$1</strong>");
+export const hl = (s) => esc(s).replace(/\*([^*\n]+)\*/g, "<strong>$1</strong>");
 const plain = (s) => String(s ?? "").replace(/\*([^*\n]+)\*/g, "$1");
+// Links and files come from admin-edited content: allow web, mail and phone links and relative paths only, so a
+// "javascript:" (or "java\tscript:", since browsers drop tabs and newlines in URLs) link can never reach the page.
+const SCHEME = /^[a-z][a-z0-9+.-]*:/i;
+export const safeUrl = (u) => {
+  const s = String(u ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim();
+  return !SCHEME.test(s) || /^(https?|mailto|tel):/i.test(s) ? s : "#";
+};
 // Uploaded files are stored as "/uploads/…"; the site is served from a sub-path, so make them relative.
-const asset = (p) => (!p || /^(https?:|data:)/.test(p) ? p || "" : p.replace(/^\.?\//, ""));
+const asset = (p) => { const s = safeUrl(p); return SCHEME.test(s) ? s : s.replace(/^\.?\//, ""); };
 const TONES = ["blue", "ink", "grey", "red"]; // project cover colours, in turn
-const ext = (href, label, cls = "") => `<a${cls ? ` class="${cls}"` : ""} href="${esc(href)}" target="_blank" rel="noopener">${label}</a>`;
+const ext = (href, label, cls = "") => `<a${cls ? ` class="${cls}"` : ""} href="${esc(safeUrl(href))}" target="_blank" rel="noopener">${label}</a>`;
 
 const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-// "Aug 2026" → 2026.58; "Present" (or anything without a date) → now.
-export function when(s, now = new Date()) {
+// "Aug 2026" → { year: 2026, month: 7 }; "Present" (or anything without a date) → null.
+export function monthYear(s) {
   const m = /([a-z]{3})[a-z]*\.?\s+(\d{4})/i.exec(s || "");
   const i = m ? MONTHS.indexOf(m[1].toLowerCase()) : -1;
-  return i < 0 ? now.getFullYear() + now.getMonth() / 12 : +m[2] + i / 12;
+  return i < 0 ? null : { year: +m[2], month: i };
+}
+// "Aug 2026" → 2026.58 on the timeline; "Present" → now.
+export function when(s, now = new Date()) {
+  const d = monthYear(s);
+  return d ? d.year + d.month / 12 : now.getFullYear() + now.getMonth() / 12;
 }
 // The employer to name beside the role: only while the latest role is still current.
 const employer = (d) => (/present/i.test(d.roles[0]?.end || "") ? d.roles[0].company : "");
@@ -54,6 +66,7 @@ export const UI_KEYS = [
   "Present", "{role} at {company}", "Read CV", "Reviews", "Phone", "What people say", "{n} recommendations",
   "{language}, updated {when}", "updated {when}", "Sending…", "Sent. Thank you, I'll reply by email.",
   "That didn't go through. Try again, or write to {email} directly.", "Copied",
+  "Please wait a minute before sending another message.",
   "Press an arrow key or swipe to start", "Score {n}", "Game over. Score {n}",
 ];
 
@@ -79,8 +92,8 @@ function timeline(d, now) {
 export function renderBody(d, { now = new Date() } = {}) {
   const p = d.profile, current = employer(d);
   const companies = [...new Set(d.roles.map((r) => r.company.replace(/\s*\(.*\)/, "")))];
-  const updated = now.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-  const cv = asset(p.resumeFile), gh = p.links.github.replace(/\/+$/, "");
+  const updated = now.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }); // same day as data-day
+  const cv = asset(p.resumeFile), gh = safeUrl(p.links.github).replace(/\/+$/, "");
   let n = 0; // sections number themselves, so a hidden one (no testimonials yet) leaves no gap
   const sec = (id, title, meta, body) => `<section class="sheet wrap" id="${id}" aria-labelledby="${id}-h">
     <header class="sh"><span class="num">${String(++n).padStart(2, "0")}</span>${T("h2", title, ` id="${id}-h"`)}${meta ? T("span", meta[0], ` class="meta"`, { n: meta[1] }) : ""}</header>${body}
@@ -234,7 +247,7 @@ ${T("a", "Skip to content", ` class="skip" href="#main"`)}
     <p class="legal">© ${now.getFullYear()} ${esc(p.name)}. ${T("span", "Designed and delivered on schedule.")}</p>
   </div>
   <nav class="foot-links" aria-label="Elsewhere" data-ta="Elsewhere">
-    ${cvBtn("", "CV")}${T("a", "Email", ` href="mailto:${esc(p.email)}"`)}${ext(p.links.linkedin, "LinkedIn")}${ext(p.links.github, "GitHub")}<a href="llms.txt">llms.txt</a>${T("a", "Admin", ` href="admin/index.html"`)}
+    ${cvBtn("", "CV")}${T("a", "Email", ` href="mailto:${esc(p.email)}"`)}${ext(p.links.linkedin, "LinkedIn")}${ext(p.links.github, "GitHub")}<a href="llms.txt">llms.txt</a>
   </nav>
 </footer>
 <a class="to-top" href="#main" aria-label="Back to top" data-ta="Back to top"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>

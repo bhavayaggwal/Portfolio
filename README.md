@@ -64,6 +64,21 @@ For agents there is also a JSON-LD `Person` block in the head and `llms.txt` (th
 `.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every push to `main` (admin saves included).
 If the site moves, update `SITE_URL` in `vite.config.js` and `repo:` in `public/admin/config.yml`.
 
+## Security
+
+The site is static files on GitHub Pages: no server, database, visitor accounts or passwords. What protects it:
+- **Admin:** anyone can open `/admin/`, but saving needs a GitHub sign-in with write access to this repo. Keep repo
+  access to yourself, use 2-factor sign-in on GitHub, and give admin tokens only *Contents: read and write* on this
+  one repo, with an expiry. The CMS script is pinned with an integrity hash (see `public/admin/index.html`).
+- **Never commit secrets.** `token.txt`, `.env*` and key files are git-ignored and blocked by the dev server. Better:
+  keep tokens in a password manager, not in this folder.
+- **Content is public by design:** everything in `content/` and `public/uploads/` is published, including the
+  Web3Forms key (it can only send mail to you; restrict it to this site's domain in the Web3Forms dashboard).
+- **Page safety:** all content is HTML-escaped when rendered, links only allow `http(s)`, `mailto` and `tel`
+  (`npm test` checks this), and the built page carries a Content-Security-Policy (`vite.config.js`).
+- **Contact form:** input is trimmed and validated, a hidden spam trap catches bots, and each browser can send once a
+  minute; Web3Forms applies its own limits.
+
 ## Decisions
 
 - **Nov 2026 redesign:** the animated album story, the extra pages (Story, Work, Contact) and the black neumorphic

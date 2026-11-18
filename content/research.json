@@ -2,14 +2,12 @@
   "publications": [
     {
       "url": "",
-      "code": "TX-001",
       "title": "AI-Driven Fashion Item Recommendation Systems",
       "kind": "Book chapter",
       "ref": "ISBN 9781032798110"
     },
     {
       "url": "",
-      "code": "TX-002",
       "title": "Geo-processing with Python",
       "kind": "Peer-reviewed journal",
       "ref": "ISSN 2320-2882"

@@ -1,14 +1,21 @@
-// npm test — the timeline's date parser, and that every page string is translated in every language.
+// npm test — dates, link safety, and that every page string is translated in every language.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { when, load, renderBody, LANGS, UI_KEYS } from "./render.js";
+import { when, monthYear, safeUrl, load, renderBody, LANGS, UI_KEYS } from "./render.js";
 
+// Dates (the timeline and the translated date labels share monthYear)
 const now = new Date(2026, 10, 15);
+assert.deepEqual(monthYear("Aug 2026"), { year: 2026, month: 7 });
+assert.equal(monthYear("Present"), null);
 assert.equal(when("Jan 2026", now), 2026);
 assert.equal(when("Aug 2026", now), 2026 + 7 / 12);
 assert.equal(when("Sept. 2024", now), 2024 + 8 / 12);
 assert.equal(when("Present", now), 2026 + 10 / 12);
 assert.equal(when("", now), 2026 + 10 / 12);
+
+// Links from admin content: only web, mail and phone schemes or relative paths reach the page.
+for (const bad of ["javascript:alert(1)", "JaVaScRiPt:x", "java\tscript:x", " javascript:x", "java\nscript:x", "data:text/html,x", "vbscript:x"]) assert.equal(safeUrl(bad), "#", bad);
+for (const ok of ["https://github.com/x", "mailto:a@b.co", "tel:+911", "/uploads/My CV.pdf", "uploads/a.pdf", "#contact"]) assert.equal(safeUrl(ok), ok, ok);
 
 // Names that read the same in every language (products, tools, awards); everything else needs a translation.
 const KEEP = new Set(["SceneForge", "Python", "SQL", "Power BI", "TensorFlow", "Jira", "Asana", "GitHub", "Claude", "CI/CD",
@@ -22,7 +29,7 @@ const problems = [];
 for (const [code] of LANGS.slice(1)) {
   const dict = JSON.parse(readFileSync(`src/i18n/${code}.json`, "utf8"));
   for (const k of keys) {
-    if (!(k in dict)) { if (!KEEP.has(k)) problems.push(`${code}: missing "${k}"`); continue; }
+    if (!(k in dict)) { if (!KEEP.has(k) && /\p{L}/u.test(k)) problems.push(`${code}: missing "${k}"`); continue; }
     if (!dict[k].trim()) problems.push(`${code}: empty "${k}"`);
     if (marks(dict[k]) !== marks(k)) problems.push(`${code}: placeholders differ in "${k}"`);
   }

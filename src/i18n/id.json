@@ -56,7 +56,6 @@
   "Designed and delivered on schedule.": "Dirancang dan dirilis tepat waktu.",
   "Elsewhere": "Tautan lain",
   "CV": "CV",
-  "Admin": "Admin",
   "Back to top": "Kembali ke atas",
   "Snake, the old-fashioned way. Arrow keys, WASD or swipe.": "Snake klasik. Tombol panah, WASD, atau geser.",
   "Back to work": "Kembali bekerja",
@@ -71,7 +70,6 @@
   "Press an arrow key or swipe to start": "Tekan tombol panah atau geser untuk mulai",
   "Score {n}": "Skor {n}",
   "Game over. Score {n}": "Permainan selesai. Skor {n}",
-
   "Freelance AI Developer": "Pengembang AI lepas",
   "AI & Data Science Professional building scalable solutions": "Profesional AI dan sains data yang membangun solusi yang dapat diskalakan",
   "I run hybrid Agile and Waterfall delivery for cross-functional teams, and I use Python, SQL and AI to turn KPI data into delivery decisions rather than just reporting on them.": "Saya menjalankan delivery hibrida Agile dan Waterfall untuk tim lintas fungsi, dan memakai Python, SQL, dan AI untuk mengubah data KPI menjadi keputusan delivery, bukan sekadar laporan.",
@@ -143,5 +141,6 @@
   "University Research Club": "Klub Riset Universitas",
   "Founder & Treasurer": "Pendiri dan Bendahara",
   "In progress": "Sedang berjalan",
-  "PMP certification": "Sertifikasi PMP"
+  "PMP certification": "Sertifikasi PMP",
+  "Please wait a minute before sending another message.": "Tunggu satu menit sebelum mengirim pesan lagi."
 }

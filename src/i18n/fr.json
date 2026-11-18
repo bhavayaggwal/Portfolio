@@ -56,7 +56,6 @@
   "Designed and delivered on schedule.": "Conçu et livré dans les délais.",
   "Elsewhere": "Ailleurs",
   "CV": "CV",
-  "Admin": "Administration",
   "Back to top": "Retour en haut",
   "Snake, the old-fashioned way. Arrow keys, WASD or swipe.": "Snake, à l’ancienne. Flèches, WASD ou glisser.",
   "Back to work": "Retour au travail",
@@ -71,7 +70,6 @@
   "Press an arrow key or swipe to start": "Appuyez sur une flèche ou glissez pour commencer",
   "Score {n}": "Score : {n}",
   "Game over. Score {n}": "Partie terminée. Score : {n}",
-
   "Freelance AI Developer": "Développeur IA freelance",
   "AI & Data Science Professional building scalable solutions": "Professionnel de l’IA et de la data science qui conçoit des solutions évolutives",
   "I run hybrid Agile and Waterfall delivery for cross-functional teams, and I use Python, SQL and AI to turn KPI data into delivery decisions rather than just reporting on them.": "Je pilote la livraison en mode hybride Agile et Waterfall pour des équipes pluridisciplinaires, et j’utilise Python, SQL et l’IA pour transformer les données de KPI en décisions, pas seulement en rapports.",
@@ -143,5 +141,6 @@
   "University Research Club": "Club de recherche universitaire",
   "Founder & Treasurer": "Fondateur et trésorier",
   "In progress": "En cours",
-  "PMP certification": "Certification PMP"
+  "PMP certification": "Certification PMP",
+  "Please wait a minute before sending another message.": "Patientez une minute avant d’envoyer un autre message."
 }

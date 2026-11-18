@@ -56,7 +56,6 @@
   "Designed and delivered on schedule.": "Спроектировано и сдано в срок.",
   "Elsewhere": "Ссылки",
   "CV": "Резюме",
-  "Admin": "Админка",
   "Back to top": "Наверх",
   "Snake, the old-fashioned way. Arrow keys, WASD or swipe.": "Классическая «Змейка». Стрелки, WASD или свайпы.",
   "Back to work": "Вернуться к работе",
@@ -71,7 +70,6 @@
   "Press an arrow key or swipe to start": "Нажмите стрелку или проведите пальцем, чтобы начать",
   "Score {n}": "Очки: {n}",
   "Game over. Score {n}": "Игра окончена. Очки: {n}",
-
   "Freelance AI Developer": "Фриланс-разработчик ИИ",
   "AI & Data Science Professional building scalable solutions": "Специалист по ИИ и data science, создающий масштабируемые решения",
   "I run hybrid Agile and Waterfall delivery for cross-functional teams, and I use Python, SQL and AI to turn KPI data into delivery decisions rather than just reporting on them.": "Я веду гибридную поставку по Agile и Waterfall для кросс-функциональных команд и с помощью Python, SQL и ИИ превращаю данные KPI в решения, а не просто в отчёты.",
@@ -143,5 +141,6 @@
   "University Research Club": "Университетский исследовательский клуб",
   "Founder & Treasurer": "Основатель и казначей",
   "In progress": "В процессе",
-  "PMP certification": "Сертификация PMP"
+  "PMP certification": "Сертификация PMP",
+  "Please wait a minute before sending another message.": "Подождите минуту, прежде чем отправить ещё одно сообщение."
 }

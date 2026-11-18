@@ -30,7 +30,6 @@ collections:
           - { name: intro, label: Intro sentence, widget: text, hint: "One or two sentences under the headline." }
           - { name: summary, label: Summary paragraph, widget: text }
           - { name: status, label: Status line, widget: string, required: false, hint: "Shown with a green dot at the top, e.g. Open to AI programme roles" }
-          - { name: photo, label: Profile photo, widget: image, required: false }
           - { name: email, label: Email, widget: string }
           - { name: formKey, label: Contact form key (Web3Forms), widget: string, required: false, hint: "From web3forms.com. Empty: the contact form opens the visitor's mail app instead." }
           - { name: phone, label: Phone, widget: string, required: false }
@@ -116,11 +115,6 @@ collections:
                 widget: list
                 required: false
                 field: { name: tool, label: Tool, widget: string }
-          - name: hiddenRepos
-            label: GitHub repositories to hide
-            widget: list
-            required: false
-            field: { name: repo, label: Repository name, widget: string }
 
       - name: skills
         label: Skills
@@ -150,7 +144,6 @@ collections:
               - { name: kind, label: Type, widget: string, hint: "e.g. Book chapter" }
               - { name: ref, label: Reference, widget: string, hint: "e.g. ISBN or ISSN" }
               - { name: url, label: Link or PDF, widget: file, required: false }
-              - { name: code, label: Short code, widget: string, required: false }
           - name: education
             label: Education
             widget: list

@@ -56,7 +56,6 @@
   "Designed and delivered on schedule.": "按时设计，按时交付。",
   "Elsewhere": "其他链接",
   "CV": "简历",
-  "Admin": "管理",
   "Back to top": "回到顶部",
   "Snake, the old-fashioned way. Arrow keys, WASD or swipe.": "经典贪吃蛇。用方向键、WASD 或滑动操作。",
   "Back to work": "回去工作",
@@ -71,7 +70,6 @@
   "Press an arrow key or swipe to start": "按方向键或滑动开始",
   "Score {n}": "得分 {n}",
   "Game over. Score {n}": "游戏结束。得分 {n}",
-
   "Freelance AI Developer": "自由职业 AI 开发者",
   "AI & Data Science Professional building scalable solutions": "构建可扩展方案的 AI 与数据科学专业人士",
   "I run hybrid Agile and Waterfall delivery for cross-functional teams, and I use Python, SQL and AI to turn KPI data into delivery decisions rather than just reporting on them.": "我为跨职能团队主持敏捷与瀑布相结合的交付，并用 Python、SQL 和 AI 把 KPI 数据转化为交付决策，而不只是做报告。",
@@ -143,5 +141,6 @@
   "University Research Club": "大学研究俱乐部",
   "Founder & Treasurer": "创始人兼财务主管",
   "In progress": "进行中",
-  "PMP certification": "PMP 认证"
+  "PMP certification": "PMP 认证",
+  "Please wait a minute before sending another message.": "请稍等一分钟再发送下一条消息。"
 }
